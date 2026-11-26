@@ -1,0 +1,848 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>EEG signal demo · N27</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #0a0e14;
+      color: #e7edf5;
+      font-synthesis: none;
+      text-rendering: optimizeLegibility;
+      --panel: #111823;
+      --panel-raised: #151f2c;
+      --line: #273344;
+      --muted: #9baabe;
+      --cyan: #66d9e8;
+      --blue: #70a7ff;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-width: 700px;
+      height: 100vh;
+      min-height: 580px;
+      display: grid;
+      grid-template-rows: 58px minmax(0, 1fr) 214px;
+      overflow: hidden;
+      background:
+        radial-gradient(ellipse at 42% -20%, rgba(35, 87, 116, .2), transparent 42%),
+        #0a0e14;
+    }
+
+    button, input { font: inherit; }
+    button { color: inherit; }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 0 22px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(11, 16, 23, .95);
+    }
+
+    .brand {
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .brand strong { font-size: 15px; letter-spacing: .01em; }
+    .brand span { color: var(--muted); font-size: 12px; }
+
+    .illustrative {
+      position: fixed;
+      z-index: 20;
+      top: 13px;
+      right: 18px;
+      padding: 5px 9px;
+      border: 1px solid #d5a848;
+      border-radius: 999px;
+      background: #302719;
+      color: #f0c66f;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: .12em;
+    }
+
+    .main {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      min-height: 0;
+      gap: 1px;
+      background: var(--line);
+    }
+
+    .viewer-panel, .signals-panel {
+      position: relative;
+      min-width: 0;
+      min-height: 0;
+      background: var(--panel);
+    }
+
+    .panel-heading {
+      position: absolute;
+      z-index: 2;
+      top: 12px;
+      left: 15px;
+      right: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      pointer-events: none;
+    }
+
+    .panel-heading h2 {
+      margin: 0;
+      color: #cad5e4;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+
+    .panel-meta { color: var(--muted); font-size: 11px; }
+
+    .viewer-panel > .panel-heading {
+      position: static;
+      flex: 0 0 34px;
+      padding: 0 15px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    #brain {
+      position: absolute;
+      top: 34px;
+      left: 0;
+      width: 100%;
+      height: calc(100% - 34px);
+      border: 0;
+      background: #fff;
+    }
+
+    .signals-panel { display: flex; flex-direction: column; }
+
+    .signals-panel .panel-heading {
+      position: static;
+      flex: 0 0 42px;
+      padding: 0 15px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .signals-panel .panel-heading h2 { font-size: 11px; }
+
+    .readout {
+      display: flex;
+      align-items: baseline;
+      gap: 9px;
+      color: #fff;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .readout strong { color: var(--cyan); font-size: 16px; }
+    .readout span { color: #d3deec; font-size: 12px; }
+    .readout small { color: var(--muted); font-size: 10px; }
+
+    #traces {
+      display: block;
+      flex: 1 1 auto;
+      width: 100%;
+      min-height: 0;
+      cursor: crosshair;
+    }
+
+    .trace-note {
+      padding: 0 14px 9px;
+      color: var(--muted);
+      font-size: 10px;
+    }
+
+    .timeline {
+      display: grid;
+      grid-template-rows: auto auto minmax(45px, 1fr);
+      gap: 9px;
+      min-height: 0;
+      padding: 12px 20px 11px;
+      border-top: 1px solid #344255;
+      background: #101721;
+    }
+
+    .caption-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .time-chip {
+      flex: 0 0 auto;
+      color: var(--cyan);
+      font-size: 12px;
+      font-variant-numeric: tabular-nums;
+      font-weight: 700;
+    }
+
+    #caption {
+      overflow: hidden;
+      color: #dbe5f1;
+      font-size: 12px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .controls {
+      display: grid;
+      grid-template-columns: auto minmax(100px, 1fr) auto;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .play-button {
+      min-width: 93px;
+      padding: 7px 12px;
+      border: 1px solid #35566a;
+      border-radius: 7px;
+      background: #163144;
+      color: #c6f7fa;
+      font-size: 12px;
+      font-weight: 650;
+      cursor: pointer;
+    }
+
+    .play-button:hover { background: #1b4056; }
+    .play-button:disabled { opacity: .45; cursor: not-allowed; }
+
+    input[type="range"] {
+      width: 100%;
+      accent-color: var(--cyan);
+      cursor: pointer;
+    }
+
+    input[type="range"]:disabled { opacity: .4; cursor: not-allowed; }
+
+    #sync-status { color: var(--muted); font-size: 10px; white-space: nowrap; }
+
+    .events {
+      display: flex;
+      align-items: stretch;
+      gap: 6px;
+      min-width: 0;
+      overflow-x: auto;
+      padding-bottom: 1px;
+      scrollbar-color: #3b4b60 transparent;
+    }
+
+    .event-button {
+      flex: 0 0 auto;
+      padding: 5px 9px;
+      border: 1px solid #2b394b;
+      border-radius: 6px;
+      background: #151f2b;
+      color: #aebdd0;
+      font-size: 10px;
+      cursor: pointer;
+    }
+
+    .event-button:hover, .event-button.active {
+      border-color: #4c8291;
+      background: #18303a;
+      color: #d9fbff;
+    }
+
+    .disclaimer {
+      position: fixed;
+      z-index: 3;
+      left: 11px;
+      bottom: 225px;
+      max-width: min(440px, 45vw);
+      padding: 6px 9px;
+      border: 1px solid rgba(43, 58, 76, .9);
+      border-radius: 6px;
+      background: rgba(10, 14, 20, .84);
+      color: #c3cedc;
+      font-size: 10px;
+      pointer-events: none;
+    }
+
+    .about {
+      position: fixed;
+      z-index: 5;
+      left: 14px;
+      top: 66px;
+    }
+
+    .about summary {
+      width: max-content;
+      padding: 5px 8px;
+      border: 1px solid #354355;
+      border-radius: 6px;
+      background: rgba(15, 22, 31, .9);
+      color: #b7c5d6;
+      font-size: 10px;
+      cursor: pointer;
+      list-style: none;
+    }
+
+    .about summary::-webkit-details-marker { display: none; }
+    .about-body {
+      width: min(390px, 78vw);
+      margin-top: 6px;
+      padding: 12px;
+      border: 1px solid #354355;
+      border-radius: 8px;
+      background: #101823;
+      color: #bdc9d8;
+      font-size: 11px;
+      line-height: 1.55;
+      box-shadow: 0 14px 40px rgba(0, 0, 0, .35);
+    }
+
+    .about-body p { margin: 0 0 7px; }
+    .about-body p:last-child { margin-bottom: 0; }
+
+    @media (max-width: 850px) {
+      body {
+        min-width: 0;
+        height: auto;
+        min-height: 100vh;
+        overflow: auto;
+        grid-template-rows: 58px minmax(540px, 1fr) 240px;
+      }
+
+      .main { grid-template-columns: 1fr; grid-template-rows: minmax(300px, 52vh) 360px; }
+      .disclaimer { top: calc(58px + 52vh - 38px); bottom: auto; }
+      .about { top: 64px; }
+      .illustrative { right: 10px; }
+      .topbar { padding: 0 12px; }
+      .brand span { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <strong>EEG signal demo</strong>
+      <span>N27 · 15 illustrative channels · 20-second loop</span>
+    </div>
+    <span class="panel-meta">Educational visualization · not clinical data</span>
+  </header>
+  <div class="illustrative">ILLUSTRATIVE</div>
+
+  <main class="main">
+    <section class="viewer-panel" aria-label="Interactive N27 brain viewer">
+      <div class="panel-heading">
+        <h2>N27 cortical model</h2>
+        <span class="panel-meta">ERD % · blue = decrease / red = increase</span>
+      </div>
+      <iframe id="brain" title="Interactive threeBrain N27 viewer" src="../public/viewer.html"></iframe>
+      <details class="about">
+        <summary>About this demo</summary>
+        <div class="about-body">
+          <p>Illustrative EEG rhythms mapped to the N27 template with threeBrain. The simulated signals are not measurements from a person and are not for diagnosis.</p>
+          <p>Electrodes shown at the cortex for illustration. Real EEG electrodes sit on the scalp.</p>
+          <p>Cite: Wang Z, Magnotti JF, Zhang X, Beauchamp MS. YAEL: your advanced electrode localizer. eNeuro 2023.</p>
+          <p>Template: N27 (Colin 27). Viewer: threeBrain.</p>
+        </div>
+      </details>
+      <div class="disclaimer">Electrodes shown at the cortex for illustration. Real EEG electrodes sit on the scalp.</div>
+    </section>
+
+    <section class="signals-panel" aria-label="Illustrative channel waveforms">
+      <div class="panel-heading">
+        <h2>Channel waveforms</h2>
+        <div class="readout"><span id="selected-channel">Fp1</span><strong id="current-value">0.0 µV</strong><small>250 Hz sampling (illustrative)</small></div>
+      </div>
+      <canvas id="traces" aria-label="EEG waveforms by channel"></canvas>
+      <div class="trace-note">Click a trace to select its channel · 5-second view centered on the current time</div>
+    </section>
+  </main>
+
+  <footer class="timeline">
+    <div class="caption-row">
+      <span class="time-chip" id="time-readout">00.0 s</span>
+      <span id="caption">Loading illustrative EEG data…</span>
+    </div>
+    <div class="controls">
+      <button class="play-button" id="play-button" type="button" disabled>▶ Play</button>
+      <input id="time-slider" type="range" min="0" max="199" step="1" value="0" aria-label="Scenario time">
+      <span id="sync-status" role="status">Loading</span>
+    </div>
+    <div class="events" id="events" aria-label="Scenario events"></div>
+  </footer>
+
+  <script>
+    "use strict";
+
+    const DURATION = 20;
+    const SAMPLE_RATE = 250;
+    const VIEW_SECONDS = 5;
+    const frame = document.getElementById("brain");
+    const canvas = document.getElementById("traces");
+    const context = canvas.getContext("2d");
+    const timeSlider = document.getElementById("time-slider");
+    const playButton = document.getElementById("play-button");
+    const syncStatus = document.getElementById("sync-status");
+    const caption = document.getElementById("caption");
+    const eventList = document.getElementById("events");
+    const currentValue = document.getElementById("current-value");
+    const selectedChannelText = document.getElementById("selected-channel");
+    let data;
+    let events;
+    let channelIndex = 0;
+    let currentTime = 0;
+    let syncMode = "pending";
+    let viewerTime;
+    let viewerPlay;
+    let viewerWriteWorks = false;
+    let probingViewer = false;
+    let hubFallbackStarted = false;
+    let playing = false;
+    let runStartedAt = 0;
+    let runStartTime = 0;
+    let lastViewerWriteAt = 0;
+
+    function modulo(value, length) {
+      return ((value % length) + length) % length;
+    }
+
+    function eventFor(time) {
+      return events.find(item => time >= item.start && time < item.end) || events[0];
+    }
+
+    function sampleAt(channel, time) {
+      const sampleIndex = Math.round(modulo(time, DURATION) * SAMPLE_RATE) % data.samples[channel].length;
+      return data.samples[channel][sampleIndex];
+    }
+
+    function namedControl(doc, label, selector = "input") {
+      return Array.from(doc.querySelectorAll(selector)).find(element => {
+        const labelId = element.getAttribute("aria-labelledby");
+        return labelId && doc.getElementById(labelId)?.textContent.trim() === label;
+      });
+    }
+
+    function inspectViewer() {
+      try {
+        const doc = frame.contentDocument;
+        if (!doc || !doc.body) return false;
+        viewerTime = namedControl(doc, "Time");
+        viewerPlay = namedControl(doc, "Play/Pause", 'input[type="checkbox"]');
+        return Boolean(viewerTime && viewerPlay);
+      } catch {
+        return false;
+      }
+    }
+
+    function readViewerTime() {
+      if (!inspectViewer()) return null;
+      const value = Number.parseFloat(viewerTime.value);
+      return Number.isFinite(value) ? modulo(value, DURATION) : null;
+    }
+
+    function setViewerTime(time) {
+      if (!inspectViewer()) return false;
+      const target = modulo(time, DURATION);
+      viewerTime.value = target.toFixed(3);
+      viewerTime.dispatchEvent(new Event("input", { bubbles: true }));
+      viewerTime.dispatchEvent(new Event("change", { bubbles: true }));
+      return true;
+    }
+
+    function setViewerPlaying(shouldPlay) {
+      if (!inspectViewer()) return false;
+      if (viewerPlay.checked !== shouldPlay) viewerPlay.click();
+      return viewerPlay.checked === shouldPlay;
+    }
+
+    function setHubElectrodeData(time) {
+      if (!hubSocket || hubSocket.readyState !== WebSocket.OPEN || !hubViewerId) return;
+      const sampleIndex = Math.round(modulo(time, DURATION) * 10) % 200;
+      const rows = data.channels.map((channel, index) => {
+        const row = viewerRows[sampleIndex * data.channels.length + index];
+        return { Electrode: index + 1, Subject: "N27", ERD_percent: row.ERD_percent };
+      });
+      hubSocket.send(JSON.stringify({
+        type: "command",
+        id: `erd-${Date.now()}`,
+        target: hubViewerId,
+        name: "set_electrode_data",
+        value: { data: {
+          Electrode: rows.map(row => row.Electrode),
+          Subject: rows.map(row => row.Subject),
+          ERD_percent: rows.map(row => row.ERD_percent),
+        }, updateDisplay: true },
+      }));
+    }
+
+    function updatePlayButton() {
+      playButton.textContent = playing ? "❚❚ Pause" : "▶ Play";
+      playButton.setAttribute("aria-pressed", String(playing));
+    }
+
+    function updateTime(time, writeViewer = false) {
+      currentTime = modulo(time, DURATION);
+      timeSlider.value = String(Math.round(currentTime * 10));
+      document.getElementById("time-readout").textContent = `${currentTime.toFixed(1).padStart(4, "0")} s`;
+      caption.textContent = eventFor(currentTime).caption;
+      for (const button of eventList.querySelectorAll(".event-button")) {
+        const start = Number(button.dataset.start);
+        const end = Number(button.dataset.end);
+        button.classList.toggle("active", currentTime >= start && currentTime < end);
+      }
+      if (writeViewer && viewerWriteWorks && performance.now() - lastViewerWriteAt > 90) {
+        lastViewerWriteAt = performance.now();
+        setViewerTime(currentTime);
+      }
+      if (writeViewer && syncMode === "hub" && performance.now() - lastViewerWriteAt > 90) {
+        lastViewerWriteAt = performance.now();
+        setHubElectrodeData(currentTime);
+      }
+      draw();
+    }
+
+    function buildEventList() {
+      eventList.replaceChildren();
+      for (const event of events) {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "event-button";
+        button.dataset.start = String(event.start);
+        button.dataset.end = String(event.end);
+        button.textContent = `${event.start.toFixed(0)}–${event.end.toFixed(0)}s · ${event.label}`;
+        button.title = event.caption;
+        button.addEventListener("click", () => {
+          if (syncMode === "control") {
+            setViewerTime(event.start);
+            updateTime(event.start);
+          } else if (syncMode === "follow") {
+            syncStatus.textContent = "Use viewer Time to seek";
+          } else if (syncMode === "hub") {
+            updateTime(event.start, true);
+          } else {
+            updateTime(event.start);
+          }
+        });
+        eventList.append(button);
+      }
+    }
+
+    function draw() {
+      if (!data || !context) return;
+      const rect = canvas.getBoundingClientRect();
+      if (!rect.width || !rect.height) return;
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const width = Math.round(rect.width * dpr);
+      const height = Math.round(rect.height * dpr);
+      if (canvas.width !== width || canvas.height !== height) {
+        canvas.width = width;
+        canvas.height = height;
+      }
+      context.setTransform(dpr, 0, 0, dpr, 0, 0);
+      const cssWidth = rect.width;
+      const cssHeight = rect.height;
+      context.clearRect(0, 0, cssWidth, cssHeight);
+      context.fillStyle = "#111823";
+      context.fillRect(0, 0, cssWidth, cssHeight);
+
+      const labelWidth = Math.max(43, Math.min(58, cssWidth * 0.12));
+      const plotLeft = labelWidth;
+      const plotWidth = Math.max(1, cssWidth - labelWidth - 10);
+      const rowHeight = cssHeight / data.channels.length;
+      const start = currentTime - VIEW_SECONDS / 2;
+      const pointsPerChannel = Math.round(VIEW_SECONDS * SAMPLE_RATE);
+
+      for (let channel = 0; channel < data.channels.length; channel++) {
+        const channelName = data.channels[channel];
+        const rowTop = channel * rowHeight;
+        const middle = rowTop + rowHeight / 2;
+        const isSelected = channel === channelIndex;
+        if (isSelected) {
+          context.fillStyle = "rgba(70, 180, 194, 0.09)";
+          context.fillRect(0, rowTop, cssWidth, rowHeight);
+        }
+        context.strokeStyle = "#283647";
+        context.lineWidth = 1;
+        context.beginPath();
+        context.moveTo(plotLeft, middle);
+        context.lineTo(cssWidth, middle);
+        context.stroke();
+        context.fillStyle = isSelected ? "#78e5ed" : "#b5c3d4";
+        context.font = `${isSelected ? "600 " : ""}10px system-ui, sans-serif`;
+        context.textBaseline = "middle";
+        context.fillText(channelName, 8, middle);
+
+        const samples = data.samples[channelName];
+        let visiblePeak = 0;
+        for (let point = 0; point <= pointsPerChannel; point++) {
+          const time = start + point / SAMPLE_RATE;
+          visiblePeak = Math.max(visiblePeak, Math.abs(sampleAt(channelName, time)));
+        }
+        const scale = Math.max(12, visiblePeak * 1.12);
+        const amplitude = Math.max(2, rowHeight * 0.39);
+        context.strokeStyle = isSelected ? "#71deea" : "#7ea8db";
+        context.globalAlpha = isSelected ? 0.95 : 0.68;
+        context.lineWidth = isSelected ? 1.35 : 1;
+        context.beginPath();
+        for (let point = 0; point <= pointsPerChannel; point++) {
+          const time = start + point / SAMPLE_RATE;
+          const value = sampleAt(channelName, time);
+          const x = plotLeft + (point / pointsPerChannel) * plotWidth;
+          const y = middle - (value / scale) * amplitude;
+          if (point === 0) context.moveTo(x, y);
+          else context.lineTo(x, y);
+        }
+        context.stroke();
+        context.globalAlpha = 1;
+      }
+
+      const nowX = plotLeft + plotWidth / 2;
+      context.strokeStyle = "#f4bf62";
+      context.lineWidth = 1.5;
+      context.setLineDash([4, 4]);
+      context.beginPath();
+      context.moveTo(nowX, 0);
+      context.lineTo(nowX, cssHeight);
+      context.stroke();
+      context.setLineDash([]);
+
+      const value = sampleAt(data.channels[channelIndex], currentTime);
+      currentValue.textContent = `${value.toFixed(1)} µV`;
+      selectedChannelText.textContent = data.channels[channelIndex];
+    }
+
+    async function probeViewer() {
+      if (probingViewer || syncMode !== "pending") return;
+      probingViewer = true;
+      const start = performance.now();
+      while (performance.now() - start < 45000 && !inspectViewer()) {
+        await new Promise(resolve => setTimeout(resolve, 250));
+      }
+      if (!inspectViewer()) {
+        await startHubFallback();
+        probingViewer = false;
+        return;
+      }
+
+      const originalTime = readViewerTime() ?? 0;
+      const testTime = originalTime < 10 ? originalTime + 1.3 : originalTime - 1.3;
+      const testAccepted = setViewerTime(testTime);
+      await new Promise(resolve => setTimeout(resolve, 220));
+      const observed = readViewerTime();
+      viewerWriteWorks = testAccepted && observed !== null && Math.abs(observed - testTime) < 0.12;
+      setViewerTime(originalTime);
+
+      if (viewerWriteWorks) {
+        syncMode = "control";
+        syncStatus.textContent = "Synced · page controls viewer";
+        timeSlider.disabled = false;
+      } else {
+        syncMode = "follow";
+        syncStatus.textContent = "Follow mode · use viewer Play/Time";
+        timeSlider.disabled = true;
+      }
+      playButton.disabled = false;
+      probingViewer = false;
+    }
+
+    let hubSocket;
+    let hubViewerId;
+    let viewerRows = [];
+
+    async function startHubFallback() {
+      if (hubFallbackStarted) return;
+      hubFallbackStarted = true;
+      syncStatus.textContent = "Same-origin viewer access unavailable";
+      try {
+        hubSocket = new WebSocket("ws://127.0.0.1:17285");
+      } catch {
+        syncMode = "local";
+        syncStatus.textContent = "Viewer sync unavailable";
+        playButton.disabled = false;
+        return;
+      }
+      const timer = setTimeout(() => {
+        if (syncMode === "pending") {
+          syncMode = "local";
+          syncStatus.textContent = "Viewer sync unavailable";
+          playButton.disabled = false;
+        }
+      }, 2500);
+      hubSocket.addEventListener("open", () => {
+        hubSocket.send(JSON.stringify({
+          type: "hello", protocol: 1, role: "controller", name: "EEG signal demo",
+        }));
+      });
+      hubSocket.addEventListener("message", event => {
+        let message;
+        try {
+          message = JSON.parse(event.data);
+        } catch {
+          return;
+        }
+        if (message.type === "welcome") {
+          hubSocket.send(JSON.stringify({ type: "list", id: "list-viewers" }));
+        } else if (message.type === "result" && message.id === "list-viewers") {
+          const target = (message.value || []).find(item => (item.subjects || []).includes("N27"));
+          if (!target) {
+            syncStatus.textContent = "Hub connected; no N27 viewer";
+            return;
+          }
+          clearTimeout(timer);
+          hubViewerId = target.id;
+          syncMode = "hub";
+          syncStatus.textContent = "Synced · local viewer hub";
+          timeSlider.disabled = false;
+          playButton.disabled = false;
+          hubSocket.send(JSON.stringify({
+            type: "command",
+            id: "select-erd",
+            target: hubViewerId,
+            name: "display_data",
+            value: { variable: "ERD_percent", range: [-100, 100] },
+          }));
+        }
+      });
+      hubSocket.addEventListener("error", () => {
+        clearTimeout(timer);
+        if (syncMode === "pending") {
+          syncMode = "local";
+          syncStatus.textContent = "Viewer sync unavailable";
+          playButton.disabled = false;
+        }
+      });
+    }
+
+    function setPlaying(next) {
+      if ((syncMode === "control" || syncMode === "follow") && !setViewerPlaying(next)) {
+        syncMode = "follow";
+        viewerWriteWorks = false;
+        syncStatus.textContent = "Follow mode · use viewer Play/Time";
+      }
+      if (syncMode === "hub" && hubSocket?.readyState === WebSocket.OPEN) {
+        const id = `focus-${Date.now()}`;
+        hubSocket.send(JSON.stringify({
+          type: "command",
+          id,
+          target: hubViewerId,
+          name: "focused_electrode",
+          value: { subject_code: "N27", electrode: channelIndex + 1 },
+        }));
+      }
+      playing = next;
+      if (playing) {
+        runStartedAt = performance.now();
+        runStartTime = currentTime;
+      }
+      updatePlayButton();
+    }
+
+    function parseValuesCsv(text) {
+      const lines = text.trim().split(/\r?\n/);
+      const headers = lines.shift().split(",");
+      const electrodeColumn = headers.indexOf("Electrode");
+      const timeColumn = headers.indexOf("Time");
+      const erdColumn = headers.indexOf("ERD_percent");
+      if (electrodeColumn < 0 || timeColumn < 0 || erdColumn < 0) {
+        throw new Error("values.csv is missing Electrode, Time, or ERD_percent");
+      }
+      return lines.map(line => {
+        const columns = line.split(",");
+        return {
+          Electrode: Number(columns[electrodeColumn]),
+          Time: Number(columns[timeColumn]),
+          ERD_percent: Number(columns[erdColumn]),
+        };
+      });
+    }
+
+    function animationFrame(now) {
+      if (syncMode === "control" || syncMode === "follow") {
+        const time = readViewerTime();
+        if (time !== null) {
+          const wasPlaying = viewerPlay?.checked ?? false;
+          if (wasPlaying !== playing) {
+            playing = wasPlaying;
+            updatePlayButton();
+          }
+          updateTime(time);
+        }
+      } else if (syncMode === "hub" && playing) {
+        updateTime((runStartTime + (now - runStartedAt) / 1000) % DURATION, true);
+      } else if (syncMode === "local" && playing) {
+        updateTime((runStartTime + (now - runStartedAt) / 1000) % DURATION);
+      }
+      requestAnimationFrame(animationFrame);
+    }
+
+    canvas.addEventListener("click", event => {
+      const row = Math.floor(event.offsetY / (canvas.clientHeight / data.channels.length));
+      if (row >= 0 && row < data.channels.length) {
+        channelIndex = row;
+        if (syncMode === "hub" && hubSocket?.readyState === WebSocket.OPEN) {
+          hubSocket.send(JSON.stringify({
+            type: "command",
+            id: `focus-${Date.now()}`,
+            target: hubViewerId,
+            name: "focused_electrode",
+            value: { subject_code: "N27", electrode: channelIndex + 1 },
+          }));
+        }
+        draw();
+      }
+    });
+
+    timeSlider.addEventListener("input", () => {
+      const time = Number(timeSlider.value) / 10;
+      if (syncMode === "control") setViewerTime(time);
+      else if (syncMode === "follow") {
+        syncStatus.textContent = "Use viewer Time to seek";
+        return;
+      }
+      updateTime(time, syncMode === "hub");
+    });
+
+    playButton.addEventListener("click", () => setPlaying(!playing));
+    frame.addEventListener("load", () => {
+      if (data) probeViewer();
+    });
+    window.addEventListener("resize", draw);
+
+    Promise.all([
+      fetch("../data/signals.json").then(response => {
+        if (!response.ok) throw new Error(`signals.json: HTTP ${response.status}`);
+        return response.json();
+      }),
+      fetch("../data/events.json").then(response => {
+        if (!response.ok) throw new Error(`events.json: HTTP ${response.status}`);
+        return response.json();
+      }),
+      fetch("../data/values.csv").then(response => {
+        if (!response.ok) throw new Error(`values.csv: HTTP ${response.status}`);
+        return response.text();
+      }),
+    ]).then(async ([signalData, eventData, valueCsv]) => {
+      data = signalData;
+      events = eventData;
+      viewerRows = parseValuesCsv(valueCsv);
+      buildEventList();
+      updateTime(0);
+      await probeViewer();
+      requestAnimationFrame(animationFrame);
+    }).catch(error => {
+      caption.textContent = `Could not load demo data: ${error.message}`;
+      syncStatus.textContent = "Data error";
+      console.error(error);
+    });
+  </script>
+</body>
+</html>

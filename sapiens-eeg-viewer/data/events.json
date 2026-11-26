@@ -1,0 +1,50 @@
+[
+  {
+    "start": 0.0,
+    "end": 4.0,
+    "label": "Rest",
+    "caption": "Rest: posterior alpha and sensorimotor mu rhythms are at baseline."
+  },
+  {
+    "start": 4.0,
+    "end": 8.0,
+    "label": "Left-hand imagery",
+    "caption": "Left-hand imagery: mu rhythm weakens over the right motor cortex (C4)."
+  },
+  {
+    "start": 8.0,
+    "end": 10.0,
+    "label": "Rest",
+    "caption": "Rest: sensorimotor rhythms return toward their baseline level."
+  },
+  {
+    "start": 10.0,
+    "end": 14.0,
+    "label": "Right-hand imagery",
+    "caption": "Right-hand imagery: mu rhythm weakens over the left motor cortex (C3)."
+  },
+  {
+    "start": 14.0,
+    "end": 15.0,
+    "label": "Eye blink",
+    "caption": "Eye blink: a large slow frontal deflection appears at Fp1 and Fp2."
+  },
+  {
+    "start": 15.0,
+    "end": 16.0,
+    "label": "Recovery",
+    "caption": "Recovery: the blink deflection subsides and the background continues."
+  },
+  {
+    "start": 16.0,
+    "end": 17.0,
+    "label": "Muscle artifact",
+    "caption": "Muscle artifact: a brief high-frequency burst appears on frontal channels."
+  },
+  {
+    "start": 17.0,
+    "end": 20.0,
+    "label": "Rest",
+    "caption": "Rest: the illustrative EEG returns to its resting rhythm before looping."
+  }
+]
