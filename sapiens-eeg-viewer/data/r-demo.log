@@ -1,0 +1,6 @@
+<Static 3D Viewer>
+Path : /home/ahmadhassan/Desktop/Playground/SeeTheB/sapiens-eeg-viewer/public/viewer.html
+Valid: TRUE
+To view the static viewer, use:
+  utils::browseURL('/home/ahmadhassan/Desktop/Playground/SeeTheB/sapiens-eeg-viewer/public/viewer.html')
+Saved standalone viewer: /home/ahmadhassan/Desktop/Playground/SeeTheB/sapiens-eeg-viewer/public/viewer.html

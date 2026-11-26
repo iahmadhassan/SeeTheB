@@ -1,0 +1,652 @@
+also installing the dependencies ‘codetools’, ‘fs’, ‘globals’, ‘listenv’, ‘jquerylib’, ‘memoise’, ‘sass’, ‘rappdirs’, ‘curl’, ‘tinytex’, ‘R.oo’, ‘R.methodsS3’, ‘Rcpp’, ‘cli’, ‘future’, ‘future.apply’, ‘parallelly’, ‘progressr’, ‘fastmap’, ‘base64enc’, ‘rlang’, ‘rstudioapi’, ‘mime’, ‘httpuv’, ‘xfun’, ‘evaluate’, ‘highr’, ‘yaml’, ‘bslib’, ‘cachem’, ‘commonmark’, ‘fontawesome’, ‘glue’, ‘htmltools’, ‘later’, ‘lifecycle’, ‘otel’, ‘promises’, ‘sourcetools’, ‘watcher’, ‘withr’, ‘xtable’, ‘pkgfilecache’, ‘magrittr’, ‘stringi’, ‘vctrs’, ‘rmarkdown’, ‘R.utils’, ‘bitops’, ‘abind’, ‘RNifti’, ‘dipsaus’, ‘xml2’, ‘servr’, ‘png’, ‘knitr’, ‘shiny’, ‘digest’, ‘freesurferformats’, ‘jsonlite’, ‘stringr’, ‘htmlwidgets’, ‘R6’, ‘gifti’, ‘oro.nifti’
+
+trying URL 'https://cloud.r-project.org/src/contrib/codetools_0.2-20.tar.gz'
+trying URL 'https://cloud.r-project.org/src/contrib/fs_2.1.0.tar.gz'
+trying URL 'https://cloud.r-project.org/src/contrib/globals_0.20.0.tar.gz'
+trying URL 'https://cloud.r-project.org/src/contrib/listenv_1.1.0.tar.gz'
+trying URL 'https://cloud.r-project.org/src/contrib/jquerylib_0.1.4.tar.gz'
+trying URL 'https://cloud.r-project.org/src/contrib/memoise_2.0.1.tar.gz'
+trying URL 'https://cloud.r-project.org/src/contrib/sass_0.5.0.tar.gz'
+trying URL 'https://cloud.r-project.org/src/contrib/rappdirs_0.3.4.tar.gz'
+trying URL 'https://cloud.r-project.org/src/contrib/curl_8.2.0.tar.gz'
+trying URL 'https://cloud.r-project.org/src/contrib/tinytex_0.62.tar.gz'
+trying URL 'https://cloud.r-project.org/src/contrib/R.oo_1.27.1.tar.gz'
+trying URL 'https://cloud.r-project.org/src/contrib/R.methodsS3_1.8.2.tar.gz'
+trying URL 'https://cloud.r-project.org/src/contrib/Rcpp_1.1.2.tar.gz'
+trying URL 'https://cloud.r-project.org/src/contrib/cli_3.6.6.tar.gz'
+trying URL 'https://cloud.r-project.org/src/contrib/future_1.82.0.tar.gz'
+trying URL 'https://cloud.r-project.org/src/contrib/future.apply_1.21.0.tar.gz'
+trying URL 'https://cloud.r-project.org/src/contrib/parallelly_1.50.0.tar.gz'
+trying URL 'https://cloud.r-project.org/src/contrib/progressr_1.1.0.tar.gz'
+trying URL 'https://cloud.r-project.org/src/contrib/fastmap_1.2.0.tar.gz'
+trying URL 'https://cloud.r-project.org/src/contrib/base64enc_0.1-6.tar.gz'
+trying URL 'https://cloud.r-project.org/src/contrib/rlang_1.3.0.tar.gz'
+trying URL 'https://cloud.r-project.org/src/contrib/rstudioapi_0.19.0.tar.gz'
+trying URL 'https://cloud.r-project.org/src/contrib/mime_0.13.tar.gz'
+trying URL 'https://cloud.r-project.org/src/contrib/httpuv_1.6.17.tar.gz'
+trying URL 'https://cloud.r-project.org/src/contrib/xfun_0.62.tar.gz'
+trying URL 'https://cloud.r-project.org/src/contrib/evaluate_1.0.5.tar.gz'
+trying URL 'https://cloud.r-project.org/src/contrib/highr_0.12.tar.gz'
+trying URL 'https://cloud.r-project.org/src/contrib/yaml_2.3.12.tar.gz'
+trying URL 'https://cloud.r-project.org/src/contrib/bslib_0.12.0.tar.gz'
+trying URL 'https://cloud.r-project.org/src/contrib/cachem_1.1.0.tar.gz'
+trying URL 'https://cloud.r-project.org/src/contrib/commonmark_2.0.0.tar.gz'
+trying URL 'https://cloud.r-project.org/src/contrib/fontawesome_0.5.3.tar.gz'
+trying URL 'https://cloud.r-project.org/src/contrib/glue_1.8.1.tar.gz'
+trying URL 'https://cloud.r-project.org/src/contrib/htmltools_0.5.9.tar.gz'
+trying URL 'https://cloud.r-project.org/src/contrib/later_1.4.8.tar.gz'
+trying URL 'https://cloud.r-project.org/src/contrib/lifecycle_1.0.5.tar.gz'
+trying URL 'https://cloud.r-project.org/src/contrib/otel_0.3.0.tar.gz'
+trying URL 'https://cloud.r-project.org/src/contrib/promises_1.5.0.tar.gz'
+trying URL 'https://cloud.r-project.org/src/contrib/sourcetools_0.1.7-2.tar.gz'
+trying URL 'https://cloud.r-project.org/src/contrib/watcher_0.2.2.tar.gz'
+trying URL 'https://cloud.r-project.org/src/contrib/withr_3.0.3.tar.gz'
+trying URL 'https://cloud.r-project.org/src/contrib/xtable_1.8-8.tar.gz'
+trying URL 'https://cloud.r-project.org/src/contrib/pkgfilecache_0.4.1.tar.gz'
+trying URL 'https://cloud.r-project.org/src/contrib/magrittr_2.0.5.tar.gz'
+trying URL 'https://cloud.r-project.org/src/contrib/stringi_1.8.9.tar.gz'
+trying URL 'https://cloud.r-project.org/src/contrib/vctrs_0.7.3.tar.gz'
+trying URL 'https://cloud.r-project.org/src/contrib/rmarkdown_2.32.tar.gz'
+trying URL 'https://cloud.r-project.org/src/contrib/R.utils_2.13.0.tar.gz'
+trying URL 'https://cloud.r-project.org/src/contrib/bitops_1.1-0.tar.gz'
+trying URL 'https://cloud.r-project.org/src/contrib/abind_1.4-8.tar.gz'
+trying URL 'https://cloud.r-project.org/src/contrib/RNifti_1.10.0.tar.gz'
+trying URL 'https://cloud.r-project.org/src/contrib/dipsaus_0.3.5.tar.gz'
+trying URL 'https://cloud.r-project.org/src/contrib/xml2_1.6.0.tar.gz'
+trying URL 'https://cloud.r-project.org/src/contrib/servr_0.33.tar.gz'
+trying URL 'https://cloud.r-project.org/src/contrib/png_0.1-9.tar.gz'
+trying URL 'https://cloud.r-project.org/src/contrib/knitr_1.52.tar.gz'
+trying URL 'https://cloud.r-project.org/src/contrib/shiny_1.15.0.tar.gz'
+trying URL 'https://cloud.r-project.org/src/contrib/digest_0.6.39.tar.gz'
+trying URL 'https://cloud.r-project.org/src/contrib/freesurferformats_1.1.2.tar.gz'
+trying URL 'https://cloud.r-project.org/src/contrib/jsonlite_2.0.0.tar.gz'
+trying URL 'https://cloud.r-project.org/src/contrib/stringr_1.6.0.tar.gz'
+trying URL 'https://cloud.r-project.org/src/contrib/htmlwidgets_1.6.4.tar.gz'
+trying URL 'https://cloud.r-project.org/src/contrib/R6_2.6.1.tar.gz'
+trying URL 'https://cloud.r-project.org/src/contrib/gifti_0.9.0.tar.gz'
+trying URL 'https://cloud.r-project.org/src/contrib/oro.nifti_0.11.4.tar.gz'
+trying URL 'https://cloud.r-project.org/src/contrib/threeBrain_1.2.0.tar.gz'
+Warning in download.packages(pkgs, destdir = tmpd, available = available,  :
+  download of package ‘bslib’ failed
+Warning in download.packages(pkgs, destdir = tmpd, available = available,  :
+  download of package ‘stringi’ failed
+* installing *source* package ‘codetools’ ...
+** this is package ‘codetools’ version ‘0.2-20’
+** package ‘codetools’ successfully unpacked and MD5 sums checked
+** using staged installation
+** R
+** byte-compile and prepare package for lazy loading
+** help
+*** installing help indices
+** building package indices
+** testing if installed package can be loaded from temporary location
+** testing if installed package can be loaded from final location
+** testing if installed package keeps a record of temporary installation path
+* DONE (codetools)
+* installing *source* package ‘fs’ ...
+** this is package ‘fs’ version ‘2.1.0’
+** package ‘fs’ successfully unpacked and MD5 sums checked
+** using staged installation
+Package libuv was not found in the pkg-config search path.
+Perhaps you should add the directory containing `libuv.pc'
+to the PKG_CONFIG_PATH environment variable
+Package 'libuv' not found
+Using PKG_CFLAGS=
+Using PKG_LIBS=-luv
+--------------------------- [CONFIGURE] --------------------------------
+Configuration failed because libuv was not found. Try installing:
+ * deb: libuv1-dev (Debian, Ubuntu, etc)
+ * rpm: libuv-devel (Fedora, EPEL)
+ * brew: libuv (OSX)
+Alternatively set environment variable USE_BUNDLED_LIBUV=1 to build a static
+version of libuv that is included with this package.
+-------------------------- [ERROR MESSAGE] ---------------------------
+./configure: line 49: x86_64-conda-linux-gnu-cc: command not found
+--------------------------------------------------------------------
+ERROR: configuration failed for package ‘fs’
+* removing ‘/tmp/seetheb-r-env/lib/R/library/fs’
+* installing *source* package ‘listenv’ ...
+** this is package ‘listenv’ version ‘1.1.0’
+** package ‘listenv’ successfully unpacked and MD5 sums checked
+** using staged installation
+** R
+** inst
+** byte-compile and prepare package for lazy loading
+** help
+*** installing help indices
+** building package indices
+** installing vignettes
+** testing if installed package can be loaded from temporary location
+** testing if installed package can be loaded from final location
+** testing if installed package keeps a record of temporary installation path
+* DONE (listenv)
+* installing *source* package ‘rappdirs’ ...
+** this is package ‘rappdirs’ version ‘0.3.4’
+** package ‘rappdirs’ successfully unpacked and MD5 sums checked
+** using staged installation
+** libs
+sh: line 1: x86_64-conda-linux-gnu-cc: command not found
+x86_64-conda-linux-gnu-cc -I"/tmp/seetheb-r-env/lib/R/include" -DNDEBUG   -DNDEBUG -D_FORTIFY_SOURCE=2 -O2 -isystem /tmp/seetheb-r-env/include -I/tmp/seetheb-r-env/include -Wl,-rpath-link,/tmp/seetheb-r-env/lib    -fpic  -march=nocona -mtune=haswell -ftree-vectorize -fPIC -fstack-protector-strong -fno-plt -O2 -ffunction-sections -pipe -fno-merge-constants -isystem /tmp/seetheb-r-env/include -fdebug-prefix-map=/home/conda/feedstock_root/build_artifacts/r-base-split_1794592514817/work=/usr/local/src/conda/r-base-4.5.3 -fdebug-prefix-map=/tmp/seetheb-r-env=/usr/local/src/conda-prefix  -c init.c -o init.o
+/bin/sh: line 1: x86_64-conda-linux-gnu-cc: command not found
+make: *** [/tmp/seetheb-r-env/lib/R/etc/Makeconf:204: init.o] Error 127
+ERROR: compilation failed for package ‘rappdirs’
+* removing ‘/tmp/seetheb-r-env/lib/R/library/rappdirs’
+* installing *source* package ‘curl’ ...
+** this is package ‘curl’ version ‘8.2.0’
+** package ‘curl’ successfully unpacked and MD5 sums checked
+** using staged installation
+Using PKG_CFLAGS=
+Using PKG_LIBS=-lcurl
+--------------------------- [ANTICONF] --------------------------------
+Configuration failed because libcurl was not found. Try installing:
+ * deb: libcurl4-openssl-dev (Debian, Ubuntu, etc)
+ * rpm: libcurl-devel (Fedora, CentOS, RHEL)
+ * apk: curl-dev (Alpine)
+If libcurl is already installed, check that 'pkg-config' is in your
+PATH and PKG_CONFIG_PATH contains a libcurl.pc file. If pkg-config
+is unavailable you can set INCLUDE_DIR and LIB_DIR manually via:
+R CMD INSTALL --configure-vars='INCLUDE_DIR=... LIB_DIR=...'
+-------------------------- [ERROR MESSAGE] ---------------------------
+./configure: line 64: x86_64-conda-linux-gnu-cc: command not found
+--------------------------------------------------------------------
+ERROR: configuration failed for package ‘curl’
+* removing ‘/tmp/seetheb-r-env/lib/R/library/curl’
+* installing *source* package ‘R.methodsS3’ ...
+** this is package ‘R.methodsS3’ version ‘1.8.2’
+** package ‘R.methodsS3’ successfully unpacked and MD5 sums checked
+** using staged installation
+** R
+** inst
+** byte-compile and prepare package for lazy loading
+** help
+*** installing help indices
+** building package indices
+** testing if installed package can be loaded from temporary location
+** testing if installed package can be loaded from final location
+** testing if installed package keeps a record of temporary installation path
+* DONE (R.methodsS3)
+* installing *source* package ‘Rcpp’ ...
+** this is package ‘Rcpp’ version ‘1.1.2’
+** package ‘Rcpp’ successfully unpacked and MD5 sums checked
+** using staged installation
+** libs
+sh: line 1: x86_64-conda-linux-gnu-c++: command not found
+x86_64-conda-linux-gnu-c++ -std=gnu++17 -I"/tmp/seetheb-r-env/lib/R/include" -DNDEBUG -I../inst/include/  -DNDEBUG -D_FORTIFY_SOURCE=2 -O2 -isystem /tmp/seetheb-r-env/include -I/tmp/seetheb-r-env/include -Wl,-rpath-link,/tmp/seetheb-r-env/lib    -fpic  -fvisibility-inlines-hidden -fmessage-length=0 -march=nocona -mtune=haswell -ftree-vectorize -fPIC -fstack-protector-strong -fno-plt -O2 -ffunction-sections -pipe -fno-merge-constants -isystem /tmp/seetheb-r-env/include -fdebug-prefix-map=/home/conda/feedstock_root/build_artifacts/r-base-split_1794592514817/work=/usr/local/src/conda/r-base-4.5.3 -fdebug-prefix-map=/tmp/seetheb-r-env=/usr/local/src/conda-prefix   -c api.cpp -o api.o
+/bin/sh: line 1: x86_64-conda-linux-gnu-c++: command not found
+make: *** [/tmp/seetheb-r-env/lib/R/etc/Makeconf:211: api.o] Error 127
+ERROR: compilation failed for package ‘Rcpp’
+* removing ‘/tmp/seetheb-r-env/lib/R/library/Rcpp’
+* installing *source* package ‘cli’ ...
+** this is package ‘cli’ version ‘3.6.6’
+** package ‘cli’ successfully unpacked and MD5 sums checked
+** using staged installation
+** libs
+sh: line 1: x86_64-conda-linux-gnu-cc: command not found
+x86_64-conda-linux-gnu-cc -I"/tmp/seetheb-r-env/lib/R/include" -DNDEBUG -I../inst/include  -DNDEBUG -D_FORTIFY_SOURCE=2 -O2 -isystem /tmp/seetheb-r-env/include -I/tmp/seetheb-r-env/include -Wl,-rpath-link,/tmp/seetheb-r-env/lib   -fvisibility=hidden -fpic  -march=nocona -mtune=haswell -ftree-vectorize -fPIC -fstack-protector-strong -fno-plt -O2 -ffunction-sections -pipe -fno-merge-constants -isystem /tmp/seetheb-r-env/include -fdebug-prefix-map=/home/conda/feedstock_root/build_artifacts/r-base-split_1794592514817/work=/usr/local/src/conda/r-base-4.5.3 -fdebug-prefix-map=/tmp/seetheb-r-env=/usr/local/src/conda-prefix  -c ansi.c -o ansi.o
+/bin/sh: line 1: x86_64-conda-linux-gnu-cc: command not found
+make: *** [/tmp/seetheb-r-env/lib/R/etc/Makeconf:204: ansi.o] Error 127
+ERROR: compilation failed for package ‘cli’
+* removing ‘/tmp/seetheb-r-env/lib/R/library/cli’
+* installing *source* package ‘parallelly’ ...
+** this is package ‘parallelly’ version ‘1.50.0’
+** package ‘parallelly’ successfully unpacked and MD5 sums checked
+** using staged installation
+** libs
+sh: line 1: x86_64-conda-linux-gnu-cc: command not found
+x86_64-conda-linux-gnu-cc -I"/tmp/seetheb-r-env/lib/R/include" -DNDEBUG   -DNDEBUG -D_FORTIFY_SOURCE=2 -O2 -isystem /tmp/seetheb-r-env/include -I/tmp/seetheb-r-env/include -Wl,-rpath-link,/tmp/seetheb-r-env/lib    -fpic  -march=nocona -mtune=haswell -ftree-vectorize -fPIC -fstack-protector-strong -fno-plt -O2 -ffunction-sections -pipe -fno-merge-constants -isystem /tmp/seetheb-r-env/include -fdebug-prefix-map=/home/conda/feedstock_root/build_artifacts/r-base-split_1794592514817/work=/usr/local/src/conda/r-base-4.5.3 -fdebug-prefix-map=/tmp/seetheb-r-env=/usr/local/src/conda-prefix  -c 000.init.c -o 000.init.o
+/bin/sh: line 1: x86_64-conda-linux-gnu-cc: command not found
+make: *** [/tmp/seetheb-r-env/lib/R/etc/Makeconf:204: 000.init.o] Error 127
+ERROR: compilation failed for package ‘parallelly’
+* removing ‘/tmp/seetheb-r-env/lib/R/library/parallelly’
+* installing *source* package ‘progressr’ ...
+** this is package ‘progressr’ version ‘1.1.0’
+** package ‘progressr’ successfully unpacked and MD5 sums checked
+** using staged installation
+** R
+** demo
+** inst
+** byte-compile and prepare package for lazy loading
+** help
+*** installing help indices
+*** copying figures
+** building package indices
+** installing vignettes
+** testing if installed package can be loaded from temporary location
+** testing if installed package can be loaded from final location
+** testing if installed package keeps a record of temporary installation path
+* DONE (progressr)
+* installing *source* package ‘fastmap’ ...
+** this is package ‘fastmap’ version ‘1.2.0’
+** package ‘fastmap’ successfully unpacked and MD5 sums checked
+** using staged installation
+** libs
+sh: line 1: x86_64-conda-linux-gnu-cc: command not found
+sh: line 1: x86_64-conda-linux-gnu-c++: command not found
+x86_64-conda-linux-gnu-c++ -std=gnu++17 -I"/tmp/seetheb-r-env/lib/R/include" -DNDEBUG -Ilib/  -DNDEBUG -D_FORTIFY_SOURCE=2 -O2 -isystem /tmp/seetheb-r-env/include -I/tmp/seetheb-r-env/include -Wl,-rpath-link,/tmp/seetheb-r-env/lib   -DR_NO_REMAP -fpic  -fvisibility-inlines-hidden -fmessage-length=0 -march=nocona -mtune=haswell -ftree-vectorize -fPIC -fstack-protector-strong -fno-plt -O2 -ffunction-sections -pipe -fno-merge-constants -isystem /tmp/seetheb-r-env/include -fdebug-prefix-map=/home/conda/feedstock_root/build_artifacts/r-base-split_1794592514817/work=/usr/local/src/conda/r-base-4.5.3 -fdebug-prefix-map=/tmp/seetheb-r-env=/usr/local/src/conda-prefix   -c fastmap.cpp -o fastmap.o
+/bin/sh: line 1: x86_64-conda-linux-gnu-c++: command not found
+make: *** [/tmp/seetheb-r-env/lib/R/etc/Makeconf:211: fastmap.o] Error 127
+ERROR: compilation failed for package ‘fastmap’
+* removing ‘/tmp/seetheb-r-env/lib/R/library/fastmap’
+* installing *source* package ‘base64enc’ ...
+** this is package ‘base64enc’ version ‘0.1-6’
+** package ‘base64enc’ successfully unpacked and MD5 sums checked
+** using staged installation
+** libs
+sh: line 1: x86_64-conda-linux-gnu-cc: command not found
+x86_64-conda-linux-gnu-cc -I"/tmp/seetheb-r-env/lib/R/include" -DNDEBUG   -DNDEBUG -D_FORTIFY_SOURCE=2 -O2 -isystem /tmp/seetheb-r-env/include -I/tmp/seetheb-r-env/include -Wl,-rpath-link,/tmp/seetheb-r-env/lib    -fpic  -march=nocona -mtune=haswell -ftree-vectorize -fPIC -fstack-protector-strong -fno-plt -O2 -ffunction-sections -pipe -fno-merge-constants -isystem /tmp/seetheb-r-env/include -fdebug-prefix-map=/home/conda/feedstock_root/build_artifacts/r-base-split_1794592514817/work=/usr/local/src/conda/r-base-4.5.3 -fdebug-prefix-map=/tmp/seetheb-r-env=/usr/local/src/conda-prefix  -c base64.c -o base64.o
+/bin/sh: line 1: x86_64-conda-linux-gnu-cc: command not found
+make: *** [/tmp/seetheb-r-env/lib/R/etc/Makeconf:204: base64.o] Error 127
+ERROR: compilation failed for package ‘base64enc’
+* removing ‘/tmp/seetheb-r-env/lib/R/library/base64enc’
+* installing *source* package ‘rlang’ ...
+** this is package ‘rlang’ version ‘1.3.0’
+** package ‘rlang’ successfully unpacked and MD5 sums checked
+** using staged installation
+** libs
+sh: line 1: x86_64-conda-linux-gnu-cc: command not found
+x86_64-conda-linux-gnu-cc -I"/tmp/seetheb-r-env/lib/R/include" -DNDEBUG -I./rlang/  -DNDEBUG -D_FORTIFY_SOURCE=2 -O2 -isystem /tmp/seetheb-r-env/include -I/tmp/seetheb-r-env/include -Wl,-rpath-link,/tmp/seetheb-r-env/lib   -fvisibility=hidden -fpic  -march=nocona -mtune=haswell -ftree-vectorize -fPIC -fstack-protector-strong -fno-plt -O2 -ffunction-sections -pipe -fno-merge-constants -isystem /tmp/seetheb-r-env/include -fdebug-prefix-map=/home/conda/feedstock_root/build_artifacts/r-base-split_1794592514817/work=/usr/local/src/conda/r-base-4.5.3 -fdebug-prefix-map=/tmp/seetheb-r-env=/usr/local/src/conda-prefix  -c capture.c -o capture.o
+/bin/sh: line 1: x86_64-conda-linux-gnu-cc: command not found
+make: *** [/tmp/seetheb-r-env/lib/R/etc/Makeconf:204: capture.o] Error 127
+ERROR: compilation failed for package ‘rlang’
+* removing ‘/tmp/seetheb-r-env/lib/R/library/rlang’
+* installing *source* package ‘rstudioapi’ ...
+** this is package ‘rstudioapi’ version ‘0.19.0’
+** package ‘rstudioapi’ successfully unpacked and MD5 sums checked
+** using staged installation
+** R
+** inst
+** byte-compile and prepare package for lazy loading
+** help
+*** installing help indices
+*** copying figures
+** building package indices
+** installing vignettes
+** testing if installed package can be loaded from temporary location
+** testing if installed package can be loaded from final location
+** testing if installed package keeps a record of temporary installation path
+* DONE (rstudioapi)
+* installing *source* package ‘mime’ ...
+** this is package ‘mime’ version ‘0.13’
+** package ‘mime’ successfully unpacked and MD5 sums checked
+** using staged installation
+** libs
+sh: line 1: x86_64-conda-linux-gnu-cc: command not found
+x86_64-conda-linux-gnu-cc -I"/tmp/seetheb-r-env/lib/R/include" -DNDEBUG   -DNDEBUG -D_FORTIFY_SOURCE=2 -O2 -isystem /tmp/seetheb-r-env/include -I/tmp/seetheb-r-env/include -Wl,-rpath-link,/tmp/seetheb-r-env/lib    -fpic  -march=nocona -mtune=haswell -ftree-vectorize -fPIC -fstack-protector-strong -fno-plt -O2 -ffunction-sections -pipe -fno-merge-constants -isystem /tmp/seetheb-r-env/include -fdebug-prefix-map=/home/conda/feedstock_root/build_artifacts/r-base-split_1794592514817/work=/usr/local/src/conda/r-base-4.5.3 -fdebug-prefix-map=/tmp/seetheb-r-env=/usr/local/src/conda-prefix  -c init.c -o init.o
+/bin/sh: line 1: x86_64-conda-linux-gnu-cc: command not found
+make: *** [/tmp/seetheb-r-env/lib/R/etc/Makeconf:204: init.o] Error 127
+ERROR: compilation failed for package ‘mime’
+* removing ‘/tmp/seetheb-r-env/lib/R/library/mime’
+* installing *source* package ‘xfun’ ...
+** this is package ‘xfun’ version ‘0.62’
+** package ‘xfun’ successfully unpacked and MD5 sums checked
+** using staged installation
+** libs
+sh: line 1: x86_64-conda-linux-gnu-cc: command not found
+x86_64-conda-linux-gnu-cc -I"/tmp/seetheb-r-env/lib/R/include" -DNDEBUG   -DNDEBUG -D_FORTIFY_SOURCE=2 -O2 -isystem /tmp/seetheb-r-env/include -I/tmp/seetheb-r-env/include -Wl,-rpath-link,/tmp/seetheb-r-env/lib    -fpic  -march=nocona -mtune=haswell -ftree-vectorize -fPIC -fstack-protector-strong -fno-plt -O2 -ffunction-sections -pipe -fno-merge-constants -isystem /tmp/seetheb-r-env/include -fdebug-prefix-map=/home/conda/feedstock_root/build_artifacts/r-base-split_1794592514817/work=/usr/local/src/conda/r-base-4.5.3 -fdebug-prefix-map=/tmp/seetheb-r-env=/usr/local/src/conda-prefix  -c base64.c -o base64.o
+/bin/sh: line 1: x86_64-conda-linux-gnu-cc: command not found
+make: *** [/tmp/seetheb-r-env/lib/R/etc/Makeconf:204: base64.o] Error 127
+ERROR: compilation failed for package ‘xfun’
+* removing ‘/tmp/seetheb-r-env/lib/R/library/xfun’
+* installing *source* package ‘evaluate’ ...
+** this is package ‘evaluate’ version ‘1.0.5’
+** package ‘evaluate’ successfully unpacked and MD5 sums checked
+** using staged installation
+** R
+** byte-compile and prepare package for lazy loading
+** help
+*** installing help indices
+** building package indices
+** testing if installed package can be loaded from temporary location
+** testing if installed package can be loaded from final location
+** testing if installed package keeps a record of temporary installation path
+* DONE (evaluate)
+* installing *source* package ‘yaml’ ...
+** this is package ‘yaml’ version ‘2.3.12’
+** package ‘yaml’ successfully unpacked and MD5 sums checked
+** using staged installation
+** libs
+sh: line 1: x86_64-conda-linux-gnu-cc: command not found
+x86_64-conda-linux-gnu-cc -I"/tmp/seetheb-r-env/lib/R/include" -DNDEBUG -I. -DNDEBUG  -DNDEBUG -D_FORTIFY_SOURCE=2 -O2 -isystem /tmp/seetheb-r-env/include -I/tmp/seetheb-r-env/include -Wl,-rpath-link,/tmp/seetheb-r-env/lib    -fpic  -march=nocona -mtune=haswell -ftree-vectorize -fPIC -fstack-protector-strong -fno-plt -O2 -ffunction-sections -pipe -fno-merge-constants -isystem /tmp/seetheb-r-env/include -fdebug-prefix-map=/home/conda/feedstock_root/build_artifacts/r-base-split_1794592514817/work=/usr/local/src/conda/r-base-4.5.3 -fdebug-prefix-map=/tmp/seetheb-r-env=/usr/local/src/conda-prefix  -c api.c -o api.o
+/bin/sh: line 1: x86_64-conda-linux-gnu-cc: command not found
+make: *** [/tmp/seetheb-r-env/lib/R/etc/Makeconf:204: api.o] Error 127
+ERROR: compilation failed for package ‘yaml’
+* removing ‘/tmp/seetheb-r-env/lib/R/library/yaml’
+* installing *source* package ‘commonmark’ ...
+** this is package ‘commonmark’ version ‘2.0.0’
+** package ‘commonmark’ successfully unpacked and MD5 sums checked
+** using staged installation
+** libs
+sh: line 1: x86_64-conda-linux-gnu-cc: command not found
+x86_64-conda-linux-gnu-cc -I"/tmp/seetheb-r-env/lib/R/include" -DNDEBUG -Icmark -I. -DCMARK_GFM_STATIC_DEFINE -DCMARK_GFM_EXTENSIONS_STATIC_DEFINE -DR_NO_REMAP -DSTRICT_R_HEADERS  -DNDEBUG -D_FORTIFY_SOURCE=2 -O2 -isystem /tmp/seetheb-r-env/include -I/tmp/seetheb-r-env/include -Wl,-rpath-link,/tmp/seetheb-r-env/lib   -fvisibility=hidden -fpic  -march=nocona -mtune=haswell -ftree-vectorize -fPIC -fstack-protector-strong -fno-plt -O2 -ffunction-sections -pipe -fno-merge-constants -isystem /tmp/seetheb-r-env/include -fdebug-prefix-map=/home/conda/feedstock_root/build_artifacts/r-base-split_1794592514817/work=/usr/local/src/conda/r-base-4.5.3 -fdebug-prefix-map=/tmp/seetheb-r-env=/usr/local/src/conda-prefix  -c extensions.c -o extensions.o
+/bin/sh: line 1: x86_64-conda-linux-gnu-cc: command not found
+make: *** [/tmp/seetheb-r-env/lib/R/etc/Makeconf:204: extensions.o] Error 127
+ERROR: compilation failed for package ‘commonmark’
+* removing ‘/tmp/seetheb-r-env/lib/R/library/commonmark’
+* installing *source* package ‘glue’ ...
+** this is package ‘glue’ version ‘1.8.1’
+** package ‘glue’ successfully unpacked and MD5 sums checked
+** using staged installation
+** libs
+sh: line 1: x86_64-conda-linux-gnu-cc: command not found
+x86_64-conda-linux-gnu-cc -I"/tmp/seetheb-r-env/lib/R/include" -DNDEBUG   -DNDEBUG -D_FORTIFY_SOURCE=2 -O2 -isystem /tmp/seetheb-r-env/include -I/tmp/seetheb-r-env/include -Wl,-rpath-link,/tmp/seetheb-r-env/lib   -fvisibility=hidden -fpic  -march=nocona -mtune=haswell -ftree-vectorize -fPIC -fstack-protector-strong -fno-plt -O2 -ffunction-sections -pipe -fno-merge-constants -isystem /tmp/seetheb-r-env/include -fdebug-prefix-map=/home/conda/feedstock_root/build_artifacts/r-base-split_1794592514817/work=/usr/local/src/conda/r-base-4.5.3 -fdebug-prefix-map=/tmp/seetheb-r-env=/usr/local/src/conda-prefix  -c glue.c -o glue.o
+/bin/sh: line 1: x86_64-conda-linux-gnu-cc: command not found
+make: *** [/tmp/seetheb-r-env/lib/R/etc/Makeconf:204: glue.o] Error 127
+ERROR: compilation failed for package ‘glue’
+* removing ‘/tmp/seetheb-r-env/lib/R/library/glue’
+* installing *source* package ‘otel’ ...
+** this is package ‘otel’ version ‘0.3.0’
+** package ‘otel’ successfully unpacked and MD5 sums checked
+** using staged installation
+** R
+** inst
+** byte-compile and prepare package for lazy loading
+** help
+*** installing help indices
+** building package indices
+** testing if installed package can be loaded from temporary location
+** testing if installed package can be loaded from final location
+** testing if installed package keeps a record of temporary installation path
+* DONE (otel)
+* installing *source* package ‘sourcetools’ ...
+** this is package ‘sourcetools’ version ‘0.1.7-2’
+** package ‘sourcetools’ successfully unpacked and MD5 sums checked
+** using staged installation
+** libs
+sh: line 1: x86_64-conda-linux-gnu-cc: command not found
+sh: line 1: x86_64-conda-linux-gnu-c++: command not found
+x86_64-conda-linux-gnu-c++ -std=gnu++17 -I"/tmp/seetheb-r-env/lib/R/include" -DNDEBUG -I../inst/include  -DNDEBUG -D_FORTIFY_SOURCE=2 -O2 -isystem /tmp/seetheb-r-env/include -I/tmp/seetheb-r-env/include -Wl,-rpath-link,/tmp/seetheb-r-env/lib    -fpic  -fvisibility-inlines-hidden -fmessage-length=0 -march=nocona -mtune=haswell -ftree-vectorize -fPIC -fstack-protector-strong -fno-plt -O2 -ffunction-sections -pipe -fno-merge-constants -isystem /tmp/seetheb-r-env/include -fdebug-prefix-map=/home/conda/feedstock_root/build_artifacts/r-base-split_1794592514817/work=/usr/local/src/conda/r-base-4.5.3 -fdebug-prefix-map=/tmp/seetheb-r-env=/usr/local/src/conda-prefix   -c Reader.cpp -o Reader.o
+/bin/sh: line 1: x86_64-conda-linux-gnu-c++: command not found
+make: *** [/tmp/seetheb-r-env/lib/R/etc/Makeconf:211: Reader.o] Error 127
+ERROR: compilation failed for package ‘sourcetools’
+* removing ‘/tmp/seetheb-r-env/lib/R/library/sourcetools’
+* installing *source* package ‘withr’ ...
+** this is package ‘withr’ version ‘3.0.3’
+** package ‘withr’ successfully unpacked and MD5 sums checked
+** using staged installation
+** R
+** inst
+** byte-compile and prepare package for lazy loading
+** help
+*** installing help indices
+*** copying figures
+** building package indices
+** installing vignettes
+** testing if installed package can be loaded from temporary location
+** testing if installed package can be loaded from final location
+** testing if installed package keeps a record of temporary installation path
+* DONE (withr)
+* installing *source* package ‘xtable’ ...
+** this is package ‘xtable’ version ‘1.8-8’
+** package ‘xtable’ successfully unpacked and MD5 sums checked
+** using staged installation
+** R
+** data
+** inst
+** byte-compile and prepare package for lazy loading
+** help
+*** installing help indices
+** building package indices
+** installing vignettes
+** testing if installed package can be loaded from temporary location
+** testing if installed package can be loaded from final location
+** testing if installed package keeps a record of temporary installation path
+* DONE (xtable)
+* installing *source* package ‘magrittr’ ...
+** this is package ‘magrittr’ version ‘2.0.5’
+** package ‘magrittr’ successfully unpacked and MD5 sums checked
+** using staged installation
+** libs
+sh: line 1: x86_64-conda-linux-gnu-cc: command not found
+x86_64-conda-linux-gnu-cc -I"/tmp/seetheb-r-env/lib/R/include" -DNDEBUG   -DNDEBUG -D_FORTIFY_SOURCE=2 -O2 -isystem /tmp/seetheb-r-env/include -I/tmp/seetheb-r-env/include -Wl,-rpath-link,/tmp/seetheb-r-env/lib    -fpic  -march=nocona -mtune=haswell -ftree-vectorize -fPIC -fstack-protector-strong -fno-plt -O2 -ffunction-sections -pipe -fno-merge-constants -isystem /tmp/seetheb-r-env/include -fdebug-prefix-map=/home/conda/feedstock_root/build_artifacts/r-base-split_1794592514817/work=/usr/local/src/conda/r-base-4.5.3 -fdebug-prefix-map=/tmp/seetheb-r-env=/usr/local/src/conda-prefix  -c pipe.c -o pipe.o
+/bin/sh: line 1: x86_64-conda-linux-gnu-cc: command not found
+make: *** [/tmp/seetheb-r-env/lib/R/etc/Makeconf:204: pipe.o] Error 127
+ERROR: compilation failed for package ‘magrittr’
+* removing ‘/tmp/seetheb-r-env/lib/R/library/magrittr’
+* installing *source* package ‘bitops’ ...
+** this is package ‘bitops’ version ‘1.1-0’
+** package ‘bitops’ successfully unpacked and MD5 sums checked
+** using staged installation
+** libs
+sh: line 1: x86_64-conda-linux-gnu-cc: command not found
+x86_64-conda-linux-gnu-cc -I"/tmp/seetheb-r-env/lib/R/include" -DNDEBUG   -DNDEBUG -D_FORTIFY_SOURCE=2 -O2 -isystem /tmp/seetheb-r-env/include -I/tmp/seetheb-r-env/include -Wl,-rpath-link,/tmp/seetheb-r-env/lib    -fpic  -march=nocona -mtune=haswell -ftree-vectorize -fPIC -fstack-protector-strong -fno-plt -O2 -ffunction-sections -pipe -fno-merge-constants -isystem /tmp/seetheb-r-env/include -fdebug-prefix-map=/home/conda/feedstock_root/build_artifacts/r-base-split_1794592514817/work=/usr/local/src/conda/r-base-4.5.3 -fdebug-prefix-map=/tmp/seetheb-r-env=/usr/local/src/conda-prefix  -c bit-ops.c -o bit-ops.o
+/bin/sh: line 1: x86_64-conda-linux-gnu-cc: command not found
+make: *** [/tmp/seetheb-r-env/lib/R/etc/Makeconf:204: bit-ops.o] Error 127
+ERROR: compilation failed for package ‘bitops’
+* removing ‘/tmp/seetheb-r-env/lib/R/library/bitops’
+* installing *source* package ‘abind’ ...
+** this is package ‘abind’ version ‘1.4-8’
+** package ‘abind’ successfully unpacked and MD5 sums checked
+** using staged installation
+** R
+** byte-compile and prepare package for lazy loading
+** help
+*** installing help indices
+** building package indices
+** testing if installed package can be loaded from temporary location
+** testing if installed package can be loaded from final location
+** testing if installed package keeps a record of temporary installation path
+* DONE (abind)
+* installing *source* package ‘png’ ...
+** this is package ‘png’ version ‘0.1-9’
+** package ‘png’ successfully unpacked and MD5 sums checked
+** using staged installation
+** libs
+sh: line 1: x86_64-conda-linux-gnu-cc: command not found
+x86_64-conda-linux-gnu-cc -I"/tmp/seetheb-r-env/lib/R/include" -DNDEBUG   -DNDEBUG -D_FORTIFY_SOURCE=2 -O2 -isystem /tmp/seetheb-r-env/include -I/tmp/seetheb-r-env/include -Wl,-rpath-link,/tmp/seetheb-r-env/lib    `libpng-config --cflags` -fpic  -march=nocona -mtune=haswell -ftree-vectorize -fPIC -fstack-protector-strong -fno-plt -O2 -ffunction-sections -pipe -fno-merge-constants -isystem /tmp/seetheb-r-env/include -fdebug-prefix-map=/home/conda/feedstock_root/build_artifacts/r-base-split_1794592514817/work=/usr/local/src/conda/r-base-4.5.3 -fdebug-prefix-map=/tmp/seetheb-r-env=/usr/local/src/conda-prefix  -c dummy.c -o dummy.o
+/bin/sh: line 1: x86_64-conda-linux-gnu-cc: command not found
+make: *** [/tmp/seetheb-r-env/lib/R/etc/Makeconf:204: dummy.o] Error 127
+ERROR: compilation failed for package ‘png’
+* removing ‘/tmp/seetheb-r-env/lib/R/library/png’
+* installing *source* package ‘digest’ ...
+** this is package ‘digest’ version ‘0.6.39’
+** package ‘digest’ successfully unpacked and MD5 sums checked
+** using staged installation
+** libs
+sh: line 1: x86_64-conda-linux-gnu-cc: command not found
+sh: line 1: x86_64-conda-linux-gnu-c++: command not found
+x86_64-conda-linux-gnu-c++ -std=gnu++17 -I"/tmp/seetheb-r-env/lib/R/include" -DNDEBUG -I.  -DNDEBUG -D_FORTIFY_SOURCE=2 -O2 -isystem /tmp/seetheb-r-env/include -I/tmp/seetheb-r-env/include -Wl,-rpath-link,/tmp/seetheb-r-env/lib    -fpic  -fvisibility-inlines-hidden -fmessage-length=0 -march=nocona -mtune=haswell -ftree-vectorize -fPIC -fstack-protector-strong -fno-plt -O2 -ffunction-sections -pipe -fno-merge-constants -isystem /tmp/seetheb-r-env/include -fdebug-prefix-map=/home/conda/feedstock_root/build_artifacts/r-base-split_1794592514817/work=/usr/local/src/conda/r-base-4.5.3 -fdebug-prefix-map=/tmp/seetheb-r-env=/usr/local/src/conda-prefix   -c SpookyV2.cpp -o SpookyV2.o
+/bin/sh: line 1: x86_64-conda-linux-gnu-c++: command not found
+make: *** [/tmp/seetheb-r-env/lib/R/etc/Makeconf:211: SpookyV2.o] Error 127
+ERROR: compilation failed for package ‘digest’
+* removing ‘/tmp/seetheb-r-env/lib/R/library/digest’
+* installing *source* package ‘jsonlite’ ...
+** this is package ‘jsonlite’ version ‘2.0.0’
+** package ‘jsonlite’ successfully unpacked and MD5 sums checked
+** using staged installation
+** libs
+sh: line 1: x86_64-conda-linux-gnu-cc: command not found
+x86_64-conda-linux-gnu-cc -I"/tmp/seetheb-r-env/lib/R/include" -DNDEBUG -Iyajl/api  -DNDEBUG -D_FORTIFY_SOURCE=2 -O2 -isystem /tmp/seetheb-r-env/include -I/tmp/seetheb-r-env/include -Wl,-rpath-link,/tmp/seetheb-r-env/lib   -fvisibility=hidden  -fpic  -march=nocona -mtune=haswell -ftree-vectorize -fPIC -fstack-protector-strong -fno-plt -O2 -ffunction-sections -pipe -fno-merge-constants -isystem /tmp/seetheb-r-env/include -fdebug-prefix-map=/home/conda/feedstock_root/build_artifacts/r-base-split_1794592514817/work=/usr/local/src/conda/r-base-4.5.3 -fdebug-prefix-map=/tmp/seetheb-r-env=/usr/local/src/conda-prefix  -c base64.c -o base64.o
+/bin/sh: line 1: x86_64-conda-linux-gnu-cc: command not found
+make: *** [/tmp/seetheb-r-env/lib/R/etc/Makeconf:204: base64.o] Error 127
+ERROR: compilation failed for package ‘jsonlite’
+* removing ‘/tmp/seetheb-r-env/lib/R/library/jsonlite’
+* installing *source* package ‘R6’ ...
+** this is package ‘R6’ version ‘2.6.1’
+** package ‘R6’ successfully unpacked and MD5 sums checked
+** using staged installation
+** R
+** byte-compile and prepare package for lazy loading
+** help
+*** installing help indices
+*** copying figures
+** building package indices
+** testing if installed package can be loaded from temporary location
+** testing if installed package can be loaded from final location
+** testing if installed package keeps a record of temporary installation path
+* DONE (R6)
+* installing *source* package ‘globals’ ...
+** this is package ‘globals’ version ‘0.20.0’
+** package ‘globals’ successfully unpacked and MD5 sums checked
+** using staged installation
+** R
+** inst
+** byte-compile and prepare package for lazy loading
+** help
+*** installing help indices
+** building package indices
+** testing if installed package can be loaded from temporary location
+** testing if installed package can be loaded from final location
+** testing if installed package keeps a record of temporary installation path
+* DONE (globals)
+ERROR: dependency ‘xfun’ is not available for package ‘tinytex’
+Perhaps try a variation of:
+install.packages('xfun')
+* removing ‘/tmp/seetheb-r-env/lib/R/library/tinytex’
+* installing *source* package ‘R.oo’ ...
+** this is package ‘R.oo’ version ‘1.27.1’
+** package ‘R.oo’ successfully unpacked and MD5 sums checked
+** using staged installation
+** R
+** inst
+** byte-compile and prepare package for lazy loading
+Warning in setGenericS3.default(name, export = exportGeneric, envir = envir,  :
+  Renamed the preexisting function getClasses to getClasses.default, which was defined in environment R.oo.
+** help
+*** installing help indices
+** building package indices
+** testing if installed package can be loaded from temporary location
+** testing if installed package can be loaded from final location
+** testing if installed package keeps a record of temporary installation path
+* DONE (R.oo)
+ERROR: dependency ‘xfun’ is not available for package ‘highr’
+Perhaps try a variation of:
+install.packages('xfun')
+* removing ‘/tmp/seetheb-r-env/lib/R/library/highr’
+ERROR: dependencies ‘rlang’, ‘fastmap’ are not available for package ‘cachem’
+Perhaps try a variation of:
+install.packages(c('rlang', 'fastmap'))
+* removing ‘/tmp/seetheb-r-env/lib/R/library/cachem’
+ERROR: dependencies ‘base64enc’, ‘digest’, ‘fastmap’, ‘rlang’ are not available for package ‘htmltools’
+Perhaps try a variation of:
+install.packages(c('base64enc', 'digest', 'fastmap', 'rlang'))
+* removing ‘/tmp/seetheb-r-env/lib/R/library/htmltools’
+ERROR: dependencies ‘Rcpp’, ‘rlang’ are not available for package ‘later’
+Perhaps try a variation of:
+install.packages(c('Rcpp', 'rlang'))
+* removing ‘/tmp/seetheb-r-env/lib/R/library/later’
+ERROR: dependencies ‘cli’, ‘rlang’ are not available for package ‘lifecycle’
+Perhaps try a variation of:
+install.packages(c('cli', 'rlang'))
+* removing ‘/tmp/seetheb-r-env/lib/R/library/lifecycle’
+ERROR: dependencies ‘rappdirs’, ‘curl’ are not available for package ‘pkgfilecache’
+Perhaps try a variation of:
+install.packages(c('rappdirs', 'curl'))
+* removing ‘/tmp/seetheb-r-env/lib/R/library/pkgfilecache’
+ERROR: dependency ‘Rcpp’ is not available for package ‘RNifti’
+Perhaps try a variation of:
+install.packages('Rcpp')
+* removing ‘/tmp/seetheb-r-env/lib/R/library/RNifti’
+ERROR: dependencies ‘cli’, ‘rlang’ are not available for package ‘xml2’
+Perhaps try a variation of:
+install.packages(c('cli', 'rlang'))
+* removing ‘/tmp/seetheb-r-env/lib/R/library/xml2’
+ERROR: dependency ‘htmltools’ is not available for package ‘jquerylib’
+Perhaps try a variation of:
+install.packages('htmltools')
+* removing ‘/tmp/seetheb-r-env/lib/R/library/jquerylib’
+ERROR: dependencies ‘rlang’, ‘cachem’ are not available for package ‘memoise’
+Perhaps try a variation of:
+install.packages(c('rlang', 'cachem'))
+* removing ‘/tmp/seetheb-r-env/lib/R/library/memoise’
+ERROR: dependencies ‘fs’, ‘htmltools’, ‘rappdirs’, ‘rlang’ are not available for package ‘sass’
+Perhaps try a variation of:
+install.packages(c('fs', 'htmltools', 'rappdirs', 'rlang'))
+* removing ‘/tmp/seetheb-r-env/lib/R/library/sass’
+ERROR: dependency ‘parallelly’ is not available for package ‘future’
+Perhaps try a variation of:
+install.packages('parallelly')
+* removing ‘/tmp/seetheb-r-env/lib/R/library/future’
+ERROR: dependencies ‘rlang’, ‘htmltools’ are not available for package ‘fontawesome’
+Perhaps try a variation of:
+install.packages(c('rlang', 'htmltools'))
+* removing ‘/tmp/seetheb-r-env/lib/R/library/fontawesome’
+ERROR: dependencies ‘fastmap’, ‘later’, ‘lifecycle’, ‘magrittr’, ‘rlang’ are not available for package ‘promises’
+Perhaps try a variation of:
+install.packages(c('fastmap', 'later', 'lifecycle', 'magrittr', 'rlang'))
+* removing ‘/tmp/seetheb-r-env/lib/R/library/promises’
+ERROR: dependencies ‘later’, ‘rlang’ are not available for package ‘watcher’
+Perhaps try a variation of:
+install.packages(c('later', 'rlang'))
+* removing ‘/tmp/seetheb-r-env/lib/R/library/watcher’
+ERROR: dependencies ‘cli’, ‘glue’, ‘lifecycle’, ‘rlang’ are not available for package ‘vctrs’
+Perhaps try a variation of:
+install.packages(c('cli', 'glue', 'lifecycle', 'rlang'))
+* removing ‘/tmp/seetheb-r-env/lib/R/library/vctrs’
+* installing *source* package ‘R.utils’ ...
+** this is package ‘R.utils’ version ‘2.13.0’
+** package ‘R.utils’ successfully unpacked and MD5 sums checked
+** using staged installation
+** R
+** inst
+** byte-compile and prepare package for lazy loading
+Warning in setGenericS3.default(name, export = exportGeneric, envir = envir,  :
+  Renamed the preexisting function warnings to warnings.default, which was defined in environment R.utils.
+Warning in setGenericS3.default("use") :
+  Renamed the preexisting function use to use.default, which was defined in environment R.utils.
+Warning in setMethodS3.default("use", "default", function(pkg = "R.utils",  :
+  Method already existed and was overwritten: use.default
+** help
+*** installing help indices
+** building package indices
+** testing if installed package can be loaded from temporary location
+** testing if installed package can be loaded from final location
+** testing if installed package keeps a record of temporary installation path
+* DONE (R.utils)
+ERROR: dependencies ‘highr’, ‘xfun’, ‘yaml’ are not available for package ‘knitr’
+Perhaps try a variation of:
+install.packages(c('highr', 'xfun', 'yaml'))
+* removing ‘/tmp/seetheb-r-env/lib/R/library/knitr’
+ERROR: dependencies ‘pkgfilecache’, ‘xml2’ are not available for package ‘freesurferformats’
+Perhaps try a variation of:
+install.packages(c('pkgfilecache', 'xml2'))
+* removing ‘/tmp/seetheb-r-env/lib/R/library/freesurferformats’
+ERROR: dependencies ‘bitops’, ‘RNifti’ are not available for package ‘oro.nifti’
+Perhaps try a variation of:
+install.packages(c('bitops', 'RNifti'))
+* removing ‘/tmp/seetheb-r-env/lib/R/library/oro.nifti’
+ERROR: dependency ‘future’ is not available for package ‘future.apply’
+Perhaps try a variation of:
+install.packages('future')
+* removing ‘/tmp/seetheb-r-env/lib/R/library/future.apply’
+ERROR: dependencies ‘later’, ‘promises’, ‘Rcpp’ are not available for package ‘httpuv’
+Perhaps try a variation of:
+install.packages(c('later', 'promises', 'Rcpp'))
+* removing ‘/tmp/seetheb-r-env/lib/R/library/httpuv’
+ERROR: dependencies ‘bslib’, ‘fontawesome’, ‘htmltools’, ‘jquerylib’, ‘jsonlite’, ‘knitr’, ‘tinytex’, ‘xfun’, ‘yaml’ are not available for package ‘rmarkdown’
+Perhaps try a variation of:
+install.packages(c('bslib', 'fontawesome', 'htmltools', 'jquerylib', 'jsonlite', 'knitr', 'tinytex', 'xfun', 'yaml'))
+* removing ‘/tmp/seetheb-r-env/lib/R/library/rmarkdown’
+ERROR: dependencies ‘cli’, ‘glue’, ‘lifecycle’, ‘magrittr’, ‘rlang’, ‘stringi’, ‘vctrs’ are not available for package ‘stringr’
+Perhaps try a variation of:
+install.packages(c('cli', 'glue', 'lifecycle', 'magrittr', 'rlang', 'stringi', 'vctrs'))
+* removing ‘/tmp/seetheb-r-env/lib/R/library/stringr’
+ERROR: dependencies ‘xml2’, ‘base64enc’ are not available for package ‘gifti’
+Perhaps try a variation of:
+install.packages(c('xml2', 'base64enc'))
+* removing ‘/tmp/seetheb-r-env/lib/R/library/gifti’
+ERROR: dependencies ‘mime’, ‘httpuv’, ‘xfun’, ‘jsonlite’ are not available for package ‘servr’
+Perhaps try a variation of:
+install.packages(c('mime', 'httpuv', 'xfun', 'jsonlite'))
+* removing ‘/tmp/seetheb-r-env/lib/R/library/servr’
+ERROR: dependencies ‘bslib’, ‘cachem’, ‘cli’, ‘commonmark’, ‘fastmap’, ‘fontawesome’, ‘glue’, ‘htmltools’, ‘httpuv’, ‘jsonlite’, ‘later’, ‘lifecycle’, ‘mime’, ‘promises’, ‘rlang’, ‘sourcetools’, ‘watcher’ are not available for package ‘shiny’
+Perhaps try a variation of:
+install.packages(c('bslib', 'cachem', 'cli', 'commonmark', 'fastmap', 'fontawesome', 'glue', 'htmltools', 'httpuv', 'jsonlite', 'later', 'lifecycle', 'mime', 'promises', 'rlang', 'sourcetools', 'watcher'))
+* removing ‘/tmp/seetheb-r-env/lib/R/library/shiny’
+ERROR: dependencies ‘htmltools’, ‘jsonlite’, ‘knitr’, ‘rmarkdown’, ‘yaml’ are not available for package ‘htmlwidgets’
+Perhaps try a variation of:
+install.packages(c('htmltools', 'jsonlite', 'knitr', 'rmarkdown', 'yaml'))
+* removing ‘/tmp/seetheb-r-env/lib/R/library/htmlwidgets’
+ERROR: dependencies ‘Rcpp’, ‘shiny’, ‘cli’, ‘stringr’, ‘jsonlite’, ‘future’, ‘future.apply’, ‘parallelly’, ‘fastmap’, ‘base64enc’, ‘digest’, ‘rlang’ are not available for package ‘dipsaus’
+Perhaps try a variation of:
+install.packages(c('Rcpp', 'shiny', 'cli', 'stringr', 'jsonlite', 'future', 'future.apply', 'parallelly', 'fastmap', 'base64enc', 'digest', 'rlang'))
+* removing ‘/tmp/seetheb-r-env/lib/R/library/dipsaus’
+ERROR: dependencies ‘dipsaus’, ‘xml2’, ‘servr’, ‘png’, ‘knitr’, ‘shiny’, ‘digest’, ‘freesurferformats’, ‘jsonlite’, ‘stringr’, ‘htmlwidgets’, ‘gifti’, ‘oro.nifti’ are not available for package ‘threeBrain’
+Perhaps try a variation of:
+install.packages(c('dipsaus', 'xml2', 'servr', 'png', 'knitr', 'shiny', 'digest', 'freesurferformats', 'jsonlite', 'stringr', 'htmlwidgets', 'gifti', 'oro.nifti'))
+* removing ‘/tmp/seetheb-r-env/lib/R/library/threeBrain’
+
+The downloaded source packages are in
+	‘/tmp/Rtmp96fsDx/downloaded_packages’
+Updating HTML index of packages in '.Library'
+Making 'packages.html' ... done
+There were 50 or more warnings (use warnings() to see the first 50)

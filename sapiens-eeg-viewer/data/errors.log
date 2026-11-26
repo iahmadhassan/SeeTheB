@@ -1,0 +1,19 @@
+Observed errors during setup
+
+1. The initial system check returned:
+   /bin/bash: R: command not found
+   `sudo -n true` also returned `sudo: a password is required`, so R was
+   installed in a user-local micromamba environment instead of system-wide.
+
+2. The first CRAN source installation under R 4.5.3 did not install threeBrain.
+   The full `install.packages("threeBrain")` output is in `r-install.log`.
+   It records missing `x86_64-conda-linux-gnu-cc` / `c++`, missing `libuv` and
+   `libcurl`, and dependency download failures for `bslib` and `stringi`.
+   The install ended with threeBrain's dependencies unavailable.
+
+3. The first demo run passed `electrodes=` to `set_electrode_values()` and
+   returned this exact error:
+   Error in x$set_electrode_values(electrodes = file.path(project_dir, "data",  :
+     unused argument (electrodes = file.path(project_dir, "data", "values.csv"))
+   The installed method's formal argument is `table_or_path`; the corrected
+   call succeeded, with output recorded in `r-demo.log`.

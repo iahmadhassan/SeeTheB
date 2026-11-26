@@ -1,0 +1,17 @@
+Downloading N27 brain from the Internet. 
+Downloading N27 brain from
+	https://github.com/dipterix/threeBrain-sample/releases/download/1.0.0/N27.zip
+to
+	/home/ahmadhassan/.local/share/R/threeBrain/templates 
+trying URL 'https://github.com/dipterix/threeBrain-sample/releases/download/1.0.0/N27.zip'
+Content type 'application/octet-stream' length 40777974 bytes (38.9 MB)
+==================================================
+downloaded 38.9 MB
+
+Subject is located at  /home/ahmadhassan/.local/share/R/threeBrain/templates/N27 
+Checking the subject 
+Congrats! Template subject has passed the check. You can set it as default template subject by entering 
+
+	threeBrain::set_default_template("N27") 
+Wrapping up installation... 
+Serving the directory /tmp/RtmpQ9t5FL/threeBrainViewer at http://127.0.0.1:4321
