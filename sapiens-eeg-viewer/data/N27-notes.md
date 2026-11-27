@@ -8,14 +8,22 @@
   It samples the N27 template's `mri/aparc+aseg.mgz` labels at the full
   resolution `surf/lh.pial` and `surf/rh.pial` vertices, then selects the
   vertex nearest each assigned aparc-region centroid. Midline targets use
-  tkRAS x=0. This is anatomical placement, not a standard 10-20 projection or
-  clinical localization.
+  tkRAS x=0. Each contact is offset 5 mm along the local outward pial normal,
+  with a 3 mm sphere radius. Original surface coordinates are kept in
+  `Pial_x/y/z`. This is schematic anatomical placement, not a standard 10-20
+  projection or clinical localization.
 - `MNI305_x/y/z` are produced from the tkRAS positions with threeBrain's
   `apply_transform_points(from = "tkrRAS", to = "MNI305")`.
 - The package's `calculate_template_coordinates()` path could not be used:
   the N27 template did not provide the expected Standard 141 vertex mapping,
-  and the call failed with `argument is not a matrix`. Consequently, visible
-  value-driven surface coloring has not been verified.
+  and the call failed with `argument is not a matrix`. The volume-electrode
+  attempt also did not show markers. The working primary display is the local
+  three.js scene, which loads the N27 pial meshes and colors the 15 value-driven
+  contact spheres. The standalone threeBrain viewer remains an alternate tab.
+- `../scripts/export_meshes.py` writes local OBJ meshes from the N27 FreeSurfer
+  surfaces, decimated to about 55,000 faces per hemisphere with
+  `fast-simplification` 0.2.0. The viewer converts tkRAS mesh/electrode
+  coordinates to its Y-up scene.
 - Sources:
   - [threeBrain documentation](https://dipterix.org/threeBrain/)
   - [threeBrain sample electrode table](https://raw.githubusercontent.com/dipterix/threeBrain-sample/master/vignettes/electrodes.csv)

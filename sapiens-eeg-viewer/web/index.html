@@ -4,7 +4,15 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="dark">
+  <link rel="icon" href="data:,">
   <title>EEG signal demo · N27</title>
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "./assets/three/three.module.js"
+      }
+    }
+  </script>
   <style>
     :root {
       color-scheme: dark;
@@ -89,6 +97,8 @@
       background: var(--panel);
     }
 
+    .viewer-panel { display: flex; flex-direction: column; }
+
     .panel-heading {
       position: absolute;
       z-index: 2;
@@ -120,15 +130,81 @@
       border-bottom: 1px solid var(--line);
     }
 
+    .visual-tabs {
+      display: flex;
+      align-items: center;
+      flex: 0 0 34px;
+      gap: 6px;
+      padding: 0 12px;
+      border-bottom: 1px solid var(--line);
+      background: #101721;
+    }
+
+    .visual-tab, .view-button {
+      padding: 5px 9px;
+      border: 1px solid #2b394b;
+      border-radius: 6px;
+      background: #151f2b;
+      color: #aebdd0;
+      font-size: 10px;
+      cursor: pointer;
+    }
+
+    .visual-tab[aria-selected="true"], .view-button:hover {
+      border-color: #4c8291;
+      background: #18303a;
+      color: #d9fbff;
+    }
+
+    .scene-wrap {
+      position: relative;
+      flex: 1 1 auto;
+      min-height: 0;
+      overflow: hidden;
+      background:
+        radial-gradient(ellipse at 50% 43%, rgba(52, 69, 89, .44), transparent 58%),
+        #101721;
+    }
+
+    #brain-scene {
+      display: block;
+      width: 100%;
+      height: 100%;
+      outline: none;
+      touch-action: none;
+    }
+
+    .scene-tools {
+      position: absolute;
+      right: 12px;
+      bottom: 12px;
+      display: flex;
+      gap: 5px;
+    }
+
+    .scene-status {
+      position: absolute;
+      left: 12px;
+      bottom: 12px;
+      color: #c4cfdd;
+      font-size: 10px;
+      text-shadow: 0 1px 5px #0a0e14;
+      pointer-events: none;
+    }
+
     #brain {
       position: absolute;
-      top: 34px;
+      top: 68px;
       left: 0;
       width: 100%;
-      height: calc(100% - 34px);
+      height: calc(100% - 68px);
       border: 0;
       background: #fff;
+      display: none;
     }
+
+    .viewer-panel[data-mode="threebrain"] #brain { display: block; }
+    .viewer-panel[data-mode="threebrain"] .scene-wrap { display: none; }
 
     .signals-panel { display: flex; flex-direction: column; }
 
@@ -275,10 +351,10 @@
     }
 
     .about {
-      position: fixed;
+      position: absolute;
       z-index: 5;
       left: 14px;
-      top: 66px;
+      top: 72px;
     }
 
     .about summary {
@@ -321,7 +397,7 @@
 
       .main { grid-template-columns: 1fr; grid-template-rows: minmax(300px, 52vh) 360px; }
       .disclaimer { top: calc(58px + 52vh - 38px); bottom: auto; }
-      .about { top: 64px; }
+      .about { top: 72px; }
       .illustrative { right: 10px; }
       .topbar { padding: 0 12px; }
       .brand span { display: none; }
@@ -343,6 +419,20 @@
       <div class="panel-heading">
         <h2>N27 cortical model</h2>
         <span class="panel-meta">ERD % · blue = decrease / red = increase</span>
+      </div>
+      <div class="visual-tabs" role="tablist" aria-label="Brain visualizer">
+        <button class="visual-tab" id="scene-tab" type="button" role="tab" aria-selected="true" aria-controls="scene-wrap">3D EEG</button>
+        <button class="visual-tab" id="threebrain-tab" type="button" role="tab" aria-selected="false" aria-controls="brain">threeBrain viewer</button>
+      </div>
+      <div class="scene-wrap" id="scene-wrap" role="tabpanel" aria-labelledby="scene-tab">
+        <canvas id="brain-scene" aria-label="Interactive N27 brain with value-colored illustrative EEG electrodes"></canvas>
+        <div class="scene-status" id="scene-status">Loading local N27 meshes…</div>
+        <div class="scene-tools" aria-label="Brain camera views">
+          <button class="view-button" type="button" data-view="top">Top</button>
+          <button class="view-button" type="button" data-view="left">Left</button>
+          <button class="view-button" type="button" data-view="right">Right</button>
+          <button class="view-button" type="button" data-view="front">Front</button>
+        </div>
       </div>
       <iframe id="brain" title="Interactive threeBrain N27 viewer" src="../public/viewer.html"></iframe>
       <details class="about">
@@ -491,6 +581,7 @@
 
     function updateTime(time, writeViewer = false) {
       currentTime = modulo(time, DURATION);
+      window.demoCurrentTime = currentTime;
       timeSlider.value = String(Math.round(currentTime * 10));
       document.getElementById("time-readout").textContent = `${currentTime.toFixed(1).padStart(4, "0")} s`;
       caption.textContent = eventFor(currentTime).caption;
@@ -508,6 +599,7 @@
         setHubElectrodeData(currentTime);
       }
       draw();
+      window.dispatchEvent(new CustomEvent("demo-time", { detail: { time: currentTime } }));
     }
 
     function buildEventList() {
@@ -639,12 +731,13 @@
       await new Promise(resolve => setTimeout(resolve, 220));
       const observed = readViewerTime();
       viewerWriteWorks = testAccepted && observed !== null && Math.abs(observed - testTime) < 0.12;
-      setViewerTime(originalTime);
+      setViewerTime(currentTime);
 
       if (viewerWriteWorks) {
         syncMode = "control";
         syncStatus.textContent = "Synced · page controls viewer";
         timeSlider.disabled = false;
+        setViewerPlaying(playing);
       } else {
         syncMode = "follow";
         syncStatus.textContent = "Follow mode · use viewer Play/Time";
@@ -785,6 +878,7 @@
     }
 
     canvas.addEventListener("click", event => {
+      if (!data) return;
       const row = Math.floor(event.offsetY / (canvas.clientHeight / data.channels.length));
       if (row >= 0 && row < data.channels.length) {
         channelIndex = row;
@@ -798,6 +892,37 @@
           }));
         }
         draw();
+      }
+    });
+
+    window.addEventListener("demo-select-channel", event => {
+      if (!data) return;
+      const index = data.channels.indexOf(event.detail.channel);
+      if (index < 0) return;
+      channelIndex = index;
+      draw();
+    });
+
+    window.addEventListener("demo-viewer-tab", event => {
+      if (event.detail.active) {
+        if (syncMode === "local") {
+          syncMode = "pending";
+          syncStatus.textContent = "Connecting to threeBrain viewer…";
+          probeViewer();
+        }
+        return;
+      }
+      if (syncMode === "control" || syncMode === "follow") {
+        const resumeLocalPlayback = playing;
+        setViewerPlaying(false);
+        syncMode = "local";
+        syncStatus.textContent = "Synced · local 3D scene clock";
+        timeSlider.disabled = false;
+        playButton.disabled = false;
+        if (resumeLocalPlayback) {
+          runStartedAt = performance.now();
+          runStartTime = currentTime;
+        }
       }
     });
 
@@ -835,8 +960,11 @@
       events = eventData;
       viewerRows = parseValuesCsv(valueCsv);
       buildEventList();
+      syncMode = "local";
+      syncStatus.textContent = "Synced · local 3D scene clock";
+      timeSlider.disabled = false;
+      playButton.disabled = false;
       updateTime(0);
-      await probeViewer();
       requestAnimationFrame(animationFrame);
     }).catch(error => {
       caption.textContent = `Could not load demo data: ${error.message}`;
@@ -844,5 +972,6 @@
       console.error(error);
     });
   </script>
+  <script type="module" src="./assets/brain-scene.js"></script>
 </body>
 </html>

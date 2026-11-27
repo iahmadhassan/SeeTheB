@@ -37,6 +37,7 @@ meshes <- lapply(c("lh", "rh"), function(hemi) {
   mesh <- read.fs.surface(file.path(n27_path, "surf", paste0(hemi, ".pial")))
   list(
     vertices = mesh$vertices,
+    faces = mesh$faces,
     labels = vertex_labels(mesh),
     hemisphere = if (hemi == "lh") "left" else "right"
   )
@@ -90,7 +91,33 @@ select_vertex <- function(region, side) {
   distance <- (candidates$x - target[1])^2 +
     (candidates$y - target[2])^2 +
     (candidates$z - target[3])^2
-  candidates[which.min(distance), , drop = FALSE]
+  selected <- candidates[which.min(distance), , drop = FALSE]
+  mesh_index <- match(selected$hemisphere, vapply(meshes, `[[`, character(1), "hemisphere"))
+  mesh <- meshes[[mesh_index]]
+  vertex_index <- selected$vertex_index
+  incident <- which(rowSums(mesh$faces == vertex_index) > 0L)
+  triangles <- mesh$faces[incident, , drop = FALSE]
+  points <- mesh$vertices
+  face_normals <- t(vapply(seq_len(nrow(triangles)), function(j) {
+    triangle <- points[triangles[j, ], , drop = FALSE]
+    cross <- c(
+      (triangle[2, 2] - triangle[1, 2]) * (triangle[3, 3] - triangle[1, 3]) -
+        (triangle[2, 3] - triangle[1, 3]) * (triangle[3, 2] - triangle[1, 2]),
+      (triangle[2, 3] - triangle[1, 3]) * (triangle[3, 1] - triangle[1, 1]) -
+        (triangle[2, 1] - triangle[1, 1]) * (triangle[3, 3] - triangle[1, 3]),
+      (triangle[2, 1] - triangle[1, 1]) * (triangle[3, 2] - triangle[1, 2]) -
+        (triangle[2, 2] - triangle[1, 2]) * (triangle[3, 1] - triangle[1, 1])
+    )
+    cross / sqrt(sum(cross^2))
+  }, numeric(3)))
+  normal <- colMeans(face_normals)
+  normal <- normal / sqrt(sum(normal^2))
+  radial <- as.numeric(unlist(selected[1, c("x", "y", "z")])) - colMeans(points)
+  if (sum(normal * as.numeric(radial)) < 0) normal <- -normal
+  selected$normal_x <- normal[1]
+  selected$normal_y <- normal[2]
+  selected$normal_z <- normal[3]
+  selected
 }
 
 coordinates <- do.call(rbind, lapply(seq_len(nrow(spec)), function(i) {
@@ -98,16 +125,19 @@ coordinates <- do.call(rbind, lapply(seq_len(nrow(spec)), function(i) {
   data.frame(
     Electrode = as.integer(i),
     Subject = "N27",
-    Coord_x = point$x,
-    Coord_y = point$y,
-    Coord_z = point$z,
+    Coord_x = point$x + point$normal_x * 5,
+    Coord_y = point$y + point$normal_y * 5,
+    Coord_z = point$z + point$normal_z * 5,
     Label = spec$Label[i],
     LabelPrefix = spec$Label[i],
     SurfaceElectrode = FALSE,
     SurfaceType = "pial",
-    Radius = 5,
+    Radius = 3,
     VertexNumber = -1L,
-    DistanceShifted = 3,
+    DistanceShifted = 0,
+    Pial_x = point$x,
+    Pial_y = point$y,
+    Pial_z = point$z,
     Hemisphere = point$hemisphere
   )
 }))
