@@ -7,7 +7,7 @@ const canvas = document.getElementById("brain-scene");
 const status = document.getElementById("scene-status");
 const panel = document.querySelector(".viewer-panel");
 const scene = new THREE.Scene();
-scene.background = new THREE.Color("#101721");
+scene.background = new THREE.Color("#f7f9fa");
 
 const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false });
 renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
@@ -22,11 +22,11 @@ controls.dampingFactor = 0.075;
 controls.minDistance = 105;
 controls.maxDistance = 480;
 
-scene.add(new THREE.HemisphereLight(0xe4efff, 0x263344, 2.0));
-const keyLight = new THREE.DirectionalLight(0xffffff, 2.5);
+scene.add(new THREE.HemisphereLight(0xffffff, 0x83909a, 1.55));
+const keyLight = new THREE.DirectionalLight(0xffffff, 1.9);
 keyLight.position.set(-80, 120, -100);
 scene.add(keyLight);
-const fillLight = new THREE.DirectionalLight(0x9ab8e0, 1.1);
+const fillLight = new THREE.DirectionalLight(0xc9d8df, 0.9);
 fillLight.position.set(100, 30, 80);
 scene.add(fillLight);
 
@@ -65,15 +65,15 @@ function makeLabel(label) {
   textCanvas.width = 256;
   textCanvas.height = 96;
   const context = textCanvas.getContext("2d");
-  context.fillStyle = "rgba(8, 13, 20, .84)";
-  context.strokeStyle = "rgba(183, 199, 220, .88)";
-  context.lineWidth = 5;
+  context.fillStyle = "rgba(255, 255, 255, .96)";
+  context.strokeStyle = "rgba(91, 111, 123, .9)";
+  context.lineWidth = 7;
   context.beginPath();
   context.roundRect(4, 4, 248, 88, 18);
   context.fill();
   context.stroke();
-  context.fillStyle = "#f4f7fb";
-  context.font = "700 48px system-ui, sans-serif";
+  context.fillStyle = "#172b38";
+  context.font = "700 56px Arial, sans-serif";
   context.textAlign = "center";
   context.textBaseline = "middle";
   context.fillText(label, 128, 48);
@@ -85,7 +85,7 @@ function makeLabel(label) {
     depthTest: false,
     depthWrite: false,
   }));
-  sprite.scale.set(11, 4.2, 1);
+  sprite.scale.set(14, 5.2, 1);
   return sprite;
 }
 
@@ -107,7 +107,7 @@ function setMarkerValue(marker, value) {
   marker.mesh.material.emissiveIntensity = 0.48 + Math.min(1, Math.abs(value) / 100) * 0.5;
   marker.glow.material.color.copy(color);
   marker.glow.material.opacity = Math.min(0.52, Math.abs(value) / 100 * 0.52);
-  marker.label.material.color.set(value < 0 ? "#acd2ff" : "#ffd0d5");
+  marker.label.material.color.set("#ffffff");
   state.values[marker.labelText] = { erd: value, color: `#${color.getHexString()}` };
 }
 
@@ -159,11 +159,11 @@ async function loadMeshes() {
       child.geometry = smoothGeometry;
       child.geometry.computeVertexNormals();
       child.material = new THREE.MeshStandardMaterial({
-        color: 0x9aa6b5,
-        roughness: 0.78,
+        color: 0xaab6bd,
+        roughness: 0.82,
         metalness: 0,
         transparent: true,
-        opacity: 0.38,
+        opacity: 0.88,
         depthWrite: false,
         side: THREE.DoubleSide,
       });
@@ -206,7 +206,7 @@ async function loadElectrodesAndValues() {
       color: 0xffffff,
       emissive: 0xffffff,
       emissiveIntensity: 0.7,
-      roughness: 0.28,
+      roughness: 0.34,
       metalness: 0,
     });
     const mesh = new THREE.Mesh(sphereGeometry, material);

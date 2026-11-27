@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="color-scheme" content="dark">
+  <meta name="color-scheme" content="light">
   <link rel="icon" href="data:,">
   <title>EEG signal demo · N27</title>
   <script type="importmap">
@@ -15,18 +15,20 @@
   </script>
   <style>
     :root {
-      color-scheme: dark;
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: #0a0e14;
-      color: #e7edf5;
+      color-scheme: light;
+      font-family: "Helvetica Neue", Arial, sans-serif;
+      background: #f3f6f7;
+      color: #24323d;
       font-synthesis: none;
       text-rendering: optimizeLegibility;
-      --panel: #111823;
-      --panel-raised: #151f2c;
-      --line: #273344;
-      --muted: #9baabe;
-      --cyan: #66d9e8;
-      --blue: #70a7ff;
+      --panel: #ffffff;
+      --panel-raised: #f7f9fa;
+      --line: #dce3e7;
+      --muted: #687985;
+      --ink: #24323d;
+      --teal: #167c80;
+      --teal-soft: #e8f4f3;
+      --blue: #397da5;
     }
 
     * { box-sizing: border-box; }
@@ -39,9 +41,7 @@
       display: grid;
       grid-template-rows: 58px minmax(0, 1fr) 214px;
       overflow: hidden;
-      background:
-        radial-gradient(ellipse at 42% -20%, rgba(35, 87, 116, .2), transparent 42%),
-        #0a0e14;
+      background: #f3f6f7;
     }
 
     button, input { font: inherit; }
@@ -54,7 +54,7 @@
       gap: 18px;
       padding: 0 22px;
       border-bottom: 1px solid var(--line);
-      background: rgba(11, 16, 23, .95);
+      background: #ffffff;
     }
 
     .brand {
@@ -64,22 +64,26 @@
       min-width: 0;
     }
 
-    .brand strong { font-size: 15px; letter-spacing: .01em; }
+    .brand strong { color: #1d303d; font-size: 15px; letter-spacing: .01em; }
     .brand span { color: var(--muted); font-size: 12px; }
 
     .illustrative {
-      position: fixed;
-      z-index: 20;
-      top: 13px;
-      right: 18px;
-      padding: 5px 9px;
-      border: 1px solid #d5a848;
+      flex: 0 0 auto;
+      padding: 5px 8px;
+      border: 1px solid #d9c58f;
       border-radius: 999px;
-      background: #302719;
-      color: #f0c66f;
-      font-size: 10px;
-      font-weight: 800;
-      letter-spacing: .12em;
+      background: #fbf8ef;
+      color: #80621f;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: .1em;
+    }
+
+    .header-meta {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      white-space: nowrap;
     }
 
     .main {
@@ -114,10 +118,10 @@
 
     .panel-heading h2 {
       margin: 0;
-      color: #cad5e4;
+      color: #435765;
       font-size: 11px;
-      font-weight: 700;
-      letter-spacing: .1em;
+      font-weight: 650;
+      letter-spacing: .07em;
       text-transform: uppercase;
     }
 
@@ -137,23 +141,23 @@
       gap: 6px;
       padding: 0 12px;
       border-bottom: 1px solid var(--line);
-      background: #101721;
+      background: #f8fafb;
     }
 
     .visual-tab, .view-button {
       padding: 5px 9px;
-      border: 1px solid #2b394b;
-      border-radius: 6px;
-      background: #151f2b;
-      color: #aebdd0;
-      font-size: 10px;
+      border: 1px solid #d8e0e5;
+      border-radius: 5px;
+      background: #ffffff;
+      color: #536672;
+      font-size: 11px;
       cursor: pointer;
     }
 
     .visual-tab[aria-selected="true"], .view-button:hover {
-      border-color: #4c8291;
-      background: #18303a;
-      color: #d9fbff;
+      border-color: #93c4c2;
+      background: var(--teal-soft);
+      color: #145f62;
     }
 
     .scene-wrap {
@@ -162,8 +166,8 @@
       min-height: 0;
       overflow: hidden;
       background:
-        radial-gradient(ellipse at 50% 43%, rgba(52, 69, 89, .44), transparent 58%),
-        #101721;
+        radial-gradient(ellipse at 50% 44%, rgba(224, 232, 235, .62), transparent 60%),
+        #f7f9fa;
     }
 
     #brain-scene {
@@ -186,9 +190,9 @@
       position: absolute;
       left: 12px;
       bottom: 12px;
-      color: #c4cfdd;
+      color: #60727e;
       font-size: 10px;
-      text-shadow: 0 1px 5px #0a0e14;
+      text-shadow: 0 1px 4px #ffffff;
       pointer-events: none;
     }
 
@@ -221,12 +225,12 @@
       display: flex;
       align-items: baseline;
       gap: 9px;
-      color: #fff;
+      color: var(--ink);
       font-variant-numeric: tabular-nums;
     }
 
-    .readout strong { color: var(--cyan); font-size: 16px; }
-    .readout span { color: #d3deec; font-size: 12px; }
+    .readout strong { color: var(--teal); font-size: 16px; }
+    .readout span { color: #415561; font-size: 12px; }
     .readout small { color: var(--muted); font-size: 10px; }
 
     #traces {
@@ -249,8 +253,8 @@
       gap: 9px;
       min-height: 0;
       padding: 12px 20px 11px;
-      border-top: 1px solid #344255;
-      background: #101721;
+      border-top: 1px solid var(--line);
+      background: #ffffff;
     }
 
     .caption-row {
@@ -262,7 +266,7 @@
 
     .time-chip {
       flex: 0 0 auto;
-      color: var(--cyan);
+      color: var(--teal);
       font-size: 12px;
       font-variant-numeric: tabular-nums;
       font-weight: 700;
@@ -270,7 +274,7 @@
 
     #caption {
       overflow: hidden;
-      color: #dbe5f1;
+      color: #455965;
       font-size: 12px;
       text-overflow: ellipsis;
       white-space: nowrap;
@@ -286,21 +290,21 @@
     .play-button {
       min-width: 93px;
       padding: 7px 12px;
-      border: 1px solid #35566a;
-      border-radius: 7px;
-      background: #163144;
-      color: #c6f7fa;
+      border: 1px solid #167c80;
+      border-radius: 5px;
+      background: #167c80;
+      color: #ffffff;
       font-size: 12px;
-      font-weight: 650;
+      font-weight: 600;
       cursor: pointer;
     }
 
-    .play-button:hover { background: #1b4056; }
+    .play-button:hover { background: #11696d; }
     .play-button:disabled { opacity: .45; cursor: not-allowed; }
 
     input[type="range"] {
       width: 100%;
-      accent-color: var(--cyan);
+      accent-color: var(--teal);
       cursor: pointer;
     }
 
@@ -315,24 +319,24 @@
       min-width: 0;
       overflow-x: auto;
       padding-bottom: 1px;
-      scrollbar-color: #3b4b60 transparent;
+      scrollbar-color: #c8d3d9 transparent;
     }
 
     .event-button {
       flex: 0 0 auto;
       padding: 5px 9px;
-      border: 1px solid #2b394b;
-      border-radius: 6px;
-      background: #151f2b;
-      color: #aebdd0;
+      border: 1px solid #d8e0e5;
+      border-radius: 5px;
+      background: #ffffff;
+      color: #536672;
       font-size: 10px;
       cursor: pointer;
     }
 
     .event-button:hover, .event-button.active {
-      border-color: #4c8291;
-      background: #18303a;
-      color: #d9fbff;
+      border-color: #93c4c2;
+      background: var(--teal-soft);
+      color: #145f62;
     }
 
     .disclaimer {
@@ -342,10 +346,10 @@
       bottom: 225px;
       max-width: min(440px, 45vw);
       padding: 6px 9px;
-      border: 1px solid rgba(43, 58, 76, .9);
-      border-radius: 6px;
-      background: rgba(10, 14, 20, .84);
-      color: #c3cedc;
+      border: 1px solid rgba(210, 220, 225, .96);
+      border-radius: 5px;
+      background: rgba(255, 255, 255, .94);
+      color: #536672;
       font-size: 10px;
       pointer-events: none;
     }
@@ -360,10 +364,10 @@
     .about summary {
       width: max-content;
       padding: 5px 8px;
-      border: 1px solid #354355;
-      border-radius: 6px;
-      background: rgba(15, 22, 31, .9);
-      color: #b7c5d6;
+      border: 1px solid #d8e0e5;
+      border-radius: 5px;
+      background: rgba(255, 255, 255, .96);
+      color: #536672;
       font-size: 10px;
       cursor: pointer;
       list-style: none;
@@ -374,13 +378,13 @@
       width: min(390px, 78vw);
       margin-top: 6px;
       padding: 12px;
-      border: 1px solid #354355;
-      border-radius: 8px;
-      background: #101823;
-      color: #bdc9d8;
+      border: 1px solid #d8e0e5;
+      border-radius: 6px;
+      background: #ffffff;
+      color: #435765;
       font-size: 11px;
       line-height: 1.55;
-      box-shadow: 0 14px 40px rgba(0, 0, 0, .35);
+      box-shadow: 0 12px 30px rgba(36, 50, 61, .12);
     }
 
     .about-body p { margin: 0 0 7px; }
@@ -398,9 +402,9 @@
       .main { grid-template-columns: 1fr; grid-template-rows: minmax(300px, 52vh) 360px; }
       .disclaimer { top: calc(58px + 52vh - 38px); bottom: auto; }
       .about { top: 72px; }
-      .illustrative { right: 10px; }
       .topbar { padding: 0 12px; }
       .brand span { display: none; }
+      .header-meta > .panel-meta { display: none; }
     }
   </style>
 </head>
@@ -410,9 +414,11 @@
       <strong>EEG signal demo</strong>
       <span>N27 · 15 illustrative channels · 20-second loop</span>
     </div>
-    <span class="panel-meta">Educational visualization · not clinical data</span>
+    <div class="header-meta">
+      <span class="panel-meta">Educational visualization · not clinical data</span>
+      <span class="illustrative">ILLUSTRATIVE</span>
+    </div>
   </header>
-  <div class="illustrative">ILLUSTRATIVE</div>
 
   <main class="main">
     <section class="viewer-panel" aria-label="Interactive N27 brain viewer">
@@ -643,7 +649,7 @@
       const cssWidth = rect.width;
       const cssHeight = rect.height;
       context.clearRect(0, 0, cssWidth, cssHeight);
-      context.fillStyle = "#111823";
+      context.fillStyle = "#ffffff";
       context.fillRect(0, 0, cssWidth, cssHeight);
 
       const labelWidth = Math.max(43, Math.min(58, cssWidth * 0.12));
@@ -659,16 +665,16 @@
         const middle = rowTop + rowHeight / 2;
         const isSelected = channel === channelIndex;
         if (isSelected) {
-          context.fillStyle = "rgba(70, 180, 194, 0.09)";
+          context.fillStyle = "rgba(22, 124, 128, 0.08)";
           context.fillRect(0, rowTop, cssWidth, rowHeight);
         }
-        context.strokeStyle = "#283647";
+        context.strokeStyle = "#e7ecef";
         context.lineWidth = 1;
         context.beginPath();
         context.moveTo(plotLeft, middle);
         context.lineTo(cssWidth, middle);
         context.stroke();
-        context.fillStyle = isSelected ? "#78e5ed" : "#b5c3d4";
+        context.fillStyle = isSelected ? "#176d70" : "#627582";
         context.font = `${isSelected ? "600 " : ""}10px system-ui, sans-serif`;
         context.textBaseline = "middle";
         context.fillText(channelName, 8, middle);
@@ -681,9 +687,9 @@
         }
         const scale = Math.max(12, visiblePeak * 1.12);
         const amplitude = Math.max(2, rowHeight * 0.39);
-        context.strokeStyle = isSelected ? "#71deea" : "#7ea8db";
-        context.globalAlpha = isSelected ? 0.95 : 0.68;
-        context.lineWidth = isSelected ? 1.35 : 1;
+        context.strokeStyle = isSelected ? "#167c80" : "#7896a8";
+        context.globalAlpha = isSelected ? 0.98 : 0.76;
+        context.lineWidth = isSelected ? 1.45 : 1.05;
         context.beginPath();
         for (let point = 0; point <= pointsPerChannel; point++) {
           const time = start + point / SAMPLE_RATE;
@@ -698,7 +704,7 @@
       }
 
       const nowX = plotLeft + plotWidth / 2;
-      context.strokeStyle = "#f4bf62";
+      context.strokeStyle = "#c18a32";
       context.lineWidth = 1.5;
       context.setLineDash([4, 4]);
       context.beginPath();

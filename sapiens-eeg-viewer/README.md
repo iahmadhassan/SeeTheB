@@ -56,6 +56,10 @@ does not contain the expected Standard 141 vertex mapping. The custom scene is
 therefore the primary visualization, and the standalone threeBrain viewer is
 retained as an alternate tab.
 
+The demo page follows the standalone viewer's light presentation with white
+panels, slate typography, restrained teal controls, and a neutral cortical
+surface.
+
 [`scripts/export_meshes.py`](scripts/export_meshes.py) exports the N27
 `lh.pial` and `rh.pial` meshes as local OBJ assets and decimates each to about
 55,000 faces using `fast-simplification` 0.2.0. The bundled three.js renderer
