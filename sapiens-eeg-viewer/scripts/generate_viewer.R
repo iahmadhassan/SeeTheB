@@ -15,7 +15,7 @@ if (!file.exists(electrode_file) || !file.exists(values_file)) {
 }
 
 x <- threeBrain(path = n27_path, subject_code = "N27", surface_types = "pial")
-x$set_electrodes(electrodes = electrode_file)
+x$set_electrodes(electrodes = electrode_file, priority = "sphere")
 x$set_electrode_values(table_or_path = values_file)
 
 widget <- plot(
@@ -25,7 +25,14 @@ widget <- plot(
   controllers = list(
     "Display Data" = "ERD_percent",
     "Surface Color" = "sync from electrodes",
-    "Map Electrodes" = TRUE
+    "Map Electrodes" = FALSE,
+    "Surface Mapping" = "no mapping",
+    "Volume Mapping" = "no mapping",
+    "Visibility" = "all visible",
+    "Text Visibility" = TRUE,
+    "Text Scale" = 2,
+    "Show Legend" = FALSE,
+    "Show Time" = FALSE
   )
 )
 viewer_path <- file.path(project_dir, "public", "viewer.html")

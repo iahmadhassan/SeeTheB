@@ -5,473 +5,448 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="light">
   <link rel="icon" href="data:,">
-  <title>EEG signal demo · N27</title>
-  <script type="importmap">
-    {
-      "imports": {
-        "three": "./assets/three/three.module.js"
-      }
-    }
-  </script>
+  <title>EEG · N27</title>
   <style>
     :root {
       color-scheme: light;
       font-family: "Helvetica Neue", Arial, sans-serif;
-      background: #f3f6f7;
-      color: #24323d;
+      color: #23343f;
+      background: #f4f6f7;
       font-synthesis: none;
       text-rendering: optimizeLegibility;
-      --panel: #ffffff;
-      --panel-raised: #f7f9fa;
+      --paper: #fff;
+      --ground: #f4f6f7;
       --line: #dce3e7;
-      --muted: #687985;
-      --ink: #24323d;
-      --teal: #167c80;
-      --teal-soft: #e8f4f3;
-      --blue: #397da5;
+      --muted: #697984;
+      --ink: #23343f;
+      --teal: #16787b;
+      --teal-pale: #e9f3f2;
+      --plot: #405d6d;
     }
 
     * { box-sizing: border-box; }
 
     body {
-      margin: 0;
-      min-width: 700px;
-      height: 100vh;
-      min-height: 580px;
       display: grid;
-      grid-template-rows: 58px minmax(0, 1fr) 214px;
+      grid-template-rows: 48px minmax(0, 1fr) 106px;
+      min-width: 720px;
+      min-height: 680px;
+      height: 100vh;
+      margin: 0;
       overflow: hidden;
-      background: #f3f6f7;
+      background: var(--ground);
     }
 
     button, input { font: inherit; }
     button { color: inherit; }
 
-    .topbar {
+    .masthead {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 18px;
-      padding: 0 22px;
+      padding: 0 24px;
       border-bottom: 1px solid var(--line);
-      background: #ffffff;
+      background: var(--paper);
     }
 
-    .brand {
-      display: flex;
-      align-items: baseline;
-      gap: 12px;
-      min-width: 0;
-    }
-
-    .brand strong { color: #1d303d; font-size: 15px; letter-spacing: .01em; }
-    .brand span { color: var(--muted); font-size: 12px; }
-
-    .illustrative {
-      flex: 0 0 auto;
-      padding: 5px 8px;
-      border: 1px solid #d9c58f;
-      border-radius: 999px;
-      background: #fbf8ef;
-      color: #80621f;
+    .identity { display: flex; align-items: baseline; gap: 12px; }
+    .identity strong { color: #1e303b; font-size: 15px; font-weight: 600; letter-spacing: .01em; }
+    .identity span, .masthead-meta { color: var(--muted); font-size: 11px; }
+    .masthead-meta { letter-spacing: .04em; }
+    .masthead-tools { display: flex; align-items: center; gap: 14px; }
+    .illustrative-badge {
+      padding: 3px 6px;
+      border: 1px solid #dce5e7;
+      border-radius: 2px;
+      color: #647a7d;
       font-size: 9px;
-      font-weight: 700;
-      letter-spacing: .1em;
+      letter-spacing: .09em;
     }
 
-    .header-meta {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      white-space: nowrap;
-    }
-
-    .main {
+    .workspace {
       display: grid;
-      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      grid-template-columns: minmax(0, .82fr) minmax(0, 1.18fr);
       min-height: 0;
-      gap: 1px;
-      background: var(--line);
+      background: var(--paper);
     }
 
-    .viewer-panel, .signals-panel {
-      position: relative;
-      min-width: 0;
-      min-height: 0;
-      background: var(--panel);
-    }
-
-    .viewer-panel { display: flex; flex-direction: column; }
+    .brain-panel, .signal-panel { display: flex; min-width: 0; min-height: 0; flex-direction: column; }
+    .brain-panel { border-right: 1px solid var(--line); }
 
     .panel-heading {
-      position: absolute;
-      z-index: 2;
-      top: 12px;
-      left: 15px;
-      right: 15px;
       display: flex;
+      min-height: 48px;
+      flex: 0 0 48px;
       align-items: center;
       justify-content: space-between;
-      gap: 10px;
-      pointer-events: none;
+      gap: 16px;
+      padding: 0 16px;
+      border-bottom: 1px solid var(--line);
+      background: var(--paper);
     }
 
     .panel-heading h2 {
       margin: 0;
-      color: #435765;
+      color: #344853;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: .055em;
+    }
+
+    .panel-subtitle, .sync-state {
+      color: var(--muted);
       font-size: 11px;
-      font-weight: 650;
-      letter-spacing: .07em;
+      white-space: nowrap;
+    }
+
+    .sync-state::before {
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      margin: 0 7px 1px 0;
+      border-radius: 50%;
+      background: #a7b3b9;
+      content: "";
+    }
+
+    .sync-state[data-ready="true"]::before { background: #318379; }
+
+    #brain {
+      display: block;
+      width: 100%;
+      min-height: 0;
+      flex: 1 1 auto;
+      border: 0;
+      background: #fff;
+    }
+
+    .mri-panel {
+      display: grid;
+      min-height: 0;
+      flex: 0 0 190px;
+      grid-template-rows: 20px minmax(0, 1fr);
+      padding: 4px 10px 7px;
+      border-top: 1px solid var(--line);
+      background: #f7f9fa;
+    }
+
+    .mri-heading {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      color: #647580;
+      font-size: 9px;
+      letter-spacing: .06em;
       text-transform: uppercase;
     }
 
-    .panel-meta { color: var(--muted); font-size: 11px; }
-
-    .viewer-panel > .panel-heading {
-      position: static;
-      flex: 0 0 34px;
-      padding: 0 15px;
-      border-bottom: 1px solid var(--line);
-    }
-
-    .visual-tabs {
-      display: flex;
-      align-items: center;
-      flex: 0 0 34px;
-      gap: 6px;
-      padding: 0 12px;
-      border-bottom: 1px solid var(--line);
-      background: #f8fafb;
-    }
-
-    .visual-tab, .view-button {
-      padding: 5px 9px;
-      border: 1px solid #d8e0e5;
-      border-radius: 5px;
-      background: #ffffff;
-      color: #536672;
-      font-size: 11px;
-      cursor: pointer;
-    }
-
-    .visual-tab[aria-selected="true"], .view-button:hover {
-      border-color: #93c4c2;
-      background: var(--teal-soft);
-      color: #145f62;
-    }
-
-    .scene-wrap {
-      position: relative;
-      flex: 1 1 auto;
-      min-height: 0;
+    .mri-focus {
       overflow: hidden;
-      background:
-        radial-gradient(ellipse at 50% 44%, rgba(224, 232, 235, .62), transparent 60%),
-        #f7f9fa;
+      color: #527078;
+      font-size: 9px;
+      letter-spacing: 0;
+      text-overflow: ellipsis;
+      text-transform: none;
+      white-space: nowrap;
     }
 
-    #brain-scene {
-      display: block;
-      width: 100%;
-      height: 100%;
-      outline: none;
-      touch-action: none;
-    }
-
-    .scene-tools {
-      position: absolute;
-      right: 12px;
-      bottom: 12px;
-      display: flex;
-      gap: 5px;
-    }
-
-    .scene-status {
-      position: absolute;
-      left: 12px;
-      bottom: 12px;
-      color: #60727e;
-      font-size: 10px;
-      text-shadow: 0 1px 4px #ffffff;
-      pointer-events: none;
-    }
-
-    #brain {
-      position: absolute;
-      top: 68px;
-      left: 0;
-      width: 100%;
-      height: calc(100% - 68px);
-      border: 0;
-      background: #fff;
-      display: none;
-    }
-
-    .viewer-panel[data-mode="threebrain"] #brain { display: block; }
-    .viewer-panel[data-mode="threebrain"] .scene-wrap { display: none; }
-
-    .signals-panel { display: flex; flex-direction: column; }
-
-    .signals-panel .panel-heading {
-      position: static;
-      flex: 0 0 42px;
-      padding: 0 15px;
-      border-bottom: 1px solid var(--line);
-    }
-
-    .signals-panel .panel-heading h2 { font-size: 11px; }
-
-    .readout {
-      display: flex;
-      align-items: baseline;
-      gap: 9px;
-      color: var(--ink);
-      font-variant-numeric: tabular-nums;
-    }
-
-    .readout strong { color: var(--teal); font-size: 16px; }
-    .readout span { color: #415561; font-size: 12px; }
-    .readout small { color: var(--muted); font-size: 10px; }
-
-    #traces {
-      display: block;
-      flex: 1 1 auto;
-      width: 100%;
-      min-height: 0;
-      cursor: crosshair;
-    }
-
-    .trace-note {
-      padding: 0 14px 9px;
-      color: var(--muted);
-      font-size: 10px;
-    }
-
-    .timeline {
+    .mri-planes {
       display: grid;
-      grid-template-rows: auto auto minmax(45px, 1fr);
-      gap: 9px;
       min-height: 0;
-      padding: 12px 20px 11px;
-      border-top: 1px solid var(--line);
-      background: #ffffff;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 6px;
     }
 
-    .caption-row {
+    .mri-plane {
+      display: grid;
+      min-width: 0;
+      min-height: 0;
+      grid-template-rows: 14px minmax(0, 1fr);
+      margin: 0;
+    }
+
+    .mri-plane figcaption {
       display: flex;
       align-items: center;
-      gap: 12px;
-      min-width: 0;
-    }
-
-    .time-chip {
-      flex: 0 0 auto;
-      color: var(--teal);
-      font-size: 12px;
-      font-variant-numeric: tabular-nums;
-      font-weight: 700;
-    }
-
-    #caption {
+      justify-content: space-between;
       overflow: hidden;
-      color: #455965;
-      font-size: 12px;
+      color: #70818a;
+      font-size: 8px;
+      letter-spacing: .04em;
       text-overflow: ellipsis;
       white-space: nowrap;
     }
 
-    .controls {
-      display: grid;
-      grid-template-columns: auto minmax(100px, 1fr) auto;
+    .mri-scan-stage {
+      display: flex;
+      min-height: 0;
+      overflow: hidden;
       align-items: center;
-      gap: 12px;
+      justify-content: center;
+      border: 1px solid #d5dde0;
+      background: #111619;
+    }
+
+    .mri-scan {
+      display: block;
+      width: auto;
+      height: 100%;
+      max-width: 100%;
+      aspect-ratio: 1;
+      image-rendering: auto;
+    }
+
+    .brain-note {
+      min-height: 26px;
+      padding: 6px 12px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      background: var(--paper);
+      font-size: 9px;
+      line-height: 1.4;
+    }
+
+    .signal-heading { align-items: center; }
+    .signal-meta { display: flex; align-items: baseline; gap: 14px; white-space: nowrap; }
+    .selected-readout { color: var(--teal); font-size: 13px; font-variant-numeric: tabular-nums; font-weight: 600; }
+    .scale-readout { color: var(--muted); font-size: 10px; font-variant-numeric: tabular-nums; }
+
+    #traces {
+      display: block;
+      width: 100%;
+      min-height: 0;
+      flex: 1 1 auto;
+      background: var(--paper);
+      cursor: crosshair;
+    }
+
+    .signal-foot {
+      min-height: 26px;
+      padding: 6px 14px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      background: var(--paper);
+      font-size: 9px;
+    }
+
+    .timeline {
+      display: grid;
+      grid-template-rows: 20px 28px 32px;
+      gap: 3px;
+      min-height: 0;
+      padding: 5px 16px 6px;
+      border-top: 1px solid var(--line);
+      background: #fff;
+    }
+
+    .timeline-caption {
+      display: flex;
+      min-width: 0;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+    }
+
+    .caption-text { display: flex; min-width: 0; align-items: baseline; gap: 8px; }
+    .event-name { flex: 0 0 auto; color: #344853; font-size: 10px; font-weight: 600; }
+    #caption { overflow: hidden; color: #62727c; font-size: 10px; text-overflow: ellipsis; white-space: nowrap; }
+    #time-readout { color: #344853; font-size: 11px; font-variant-numeric: tabular-nums; font-weight: 600; white-space: nowrap; }
+
+    .transport {
+      display: grid;
+      grid-template-columns: 64px minmax(100px, 1fr) auto;
+      align-items: center;
+      gap: 10px;
     }
 
     .play-button {
-      min-width: 93px;
-      padding: 7px 12px;
-      border: 1px solid #167c80;
-      border-radius: 5px;
-      background: #167c80;
-      color: #ffffff;
-      font-size: 12px;
-      font-weight: 600;
+      min-height: 28px;
+      border: 1px solid #cbd6da;
+      border-radius: 3px;
+      background: #fff;
+      color: #344853;
+      font-size: 11px;
       cursor: pointer;
     }
 
-    .play-button:hover { background: #11696d; }
-    .play-button:disabled { opacity: .45; cursor: not-allowed; }
+    .play-button:hover:not(:disabled) { border-color: #80aaa7; background: #f5faf9; }
+    .play-button:disabled { color: #9aa6ad; cursor: not-allowed; }
 
-    input[type="range"] {
-      width: 100%;
-      accent-color: var(--teal);
-      cursor: pointer;
-    }
-
-    input[type="range"]:disabled { opacity: .4; cursor: not-allowed; }
-
-    #sync-status { color: var(--muted); font-size: 10px; white-space: nowrap; }
+    input[type="range"] { width: 100%; accent-color: var(--teal); cursor: pointer; }
+    input[type="range"]:disabled { cursor: not-allowed; opacity: .48; }
+    #sync-status { color: var(--muted); font-size: 10px; text-align: right; white-space: nowrap; }
 
     .events {
       display: flex;
-      align-items: stretch;
-      gap: 6px;
-      min-width: 0;
+      min-height: 0;
+      gap: 0;
+      border: 1px solid var(--line);
+      border-radius: 3px;
       overflow-x: auto;
-      padding-bottom: 1px;
+      background: #fbfcfc;
       scrollbar-color: #c8d3d9 transparent;
     }
 
     .event-button {
-      flex: 0 0 auto;
-      padding: 5px 9px;
-      border: 1px solid #d8e0e5;
-      border-radius: 5px;
-      background: #ffffff;
-      color: #536672;
-      font-size: 10px;
+      display: flex;
+      min-width: 58px;
+      flex: var(--duration) 1 0;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      gap: 5px;
+      padding: 3px 8px;
+      border: 0;
+      border-right: 1px solid var(--line);
+      border-bottom: 2px solid transparent;
+      background: transparent;
+      color: #647580;
+      text-align: left;
+      white-space: nowrap;
       cursor: pointer;
     }
 
-    .event-button:hover, .event-button.active {
-      border-color: #93c4c2;
-      background: var(--teal-soft);
-      color: #145f62;
-    }
-
-    .disclaimer {
-      position: fixed;
-      z-index: 3;
-      left: 11px;
-      bottom: 225px;
-      max-width: min(440px, 45vw);
-      padding: 6px 9px;
-      border: 1px solid rgba(210, 220, 225, .96);
-      border-radius: 5px;
-      background: rgba(255, 255, 255, .94);
-      color: #536672;
-      font-size: 10px;
-      pointer-events: none;
-    }
+    .event-button:hover { background: #f7f9fa; }
+    .event-button.active { border-bottom-color: var(--teal); background: var(--teal-pale); color: #245c5d; }
+    .event-button strong { overflow: hidden; font-size: 9px; font-weight: 550; text-overflow: ellipsis; }
+    .event-button span { color: #819099; font-size: 8px; font-variant-numeric: tabular-nums; white-space: nowrap; }
 
     .about {
-      position: absolute;
-      z-index: 5;
-      left: 14px;
-      top: 72px;
-    }
-
-    .about summary {
-      width: max-content;
-      padding: 5px 8px;
-      border: 1px solid #d8e0e5;
-      border-radius: 5px;
-      background: rgba(255, 255, 255, .96);
-      color: #536672;
+      position: relative;
+      z-index: 4;
+      color: var(--muted);
       font-size: 10px;
-      cursor: pointer;
-      list-style: none;
     }
 
+    .about summary { cursor: pointer; list-style: none; }
     .about summary::-webkit-details-marker { display: none; }
+    .about summary::after { margin-left: 5px; color: var(--teal); content: "+"; }
+    .about[open] summary::after { content: "−"; }
     .about-body {
-      width: min(390px, 78vw);
-      margin-top: 6px;
-      padding: 12px;
-      border: 1px solid #d8e0e5;
-      border-radius: 6px;
-      background: #ffffff;
-      color: #435765;
+      position: absolute;
+      right: 0;
+      top: 24px;
+      width: min(390px, 82vw);
+      padding: 14px 16px;
+      border: 1px solid var(--line);
+      background: #fff;
+      box-shadow: 0 8px 26px rgb(35 52 63 / 12%);
+      color: #566872;
       font-size: 11px;
       line-height: 1.55;
-      box-shadow: 0 12px 30px rgba(36, 50, 61, .12);
     }
 
     .about-body p { margin: 0 0 7px; }
     .about-body p:last-child { margin-bottom: 0; }
 
-    @media (max-width: 850px) {
+    @media (max-width: 900px) {
       body {
+        grid-template-rows: 48px minmax(0, 1fr) 140px;
         min-width: 0;
+        min-height: 760px;
         height: auto;
-        min-height: 100vh;
         overflow: auto;
-        grid-template-rows: 58px minmax(540px, 1fr) 240px;
       }
 
-      .main { grid-template-columns: 1fr; grid-template-rows: minmax(300px, 52vh) 360px; }
-      .disclaimer { top: calc(58px + 52vh - 38px); bottom: auto; }
-      .about { top: 72px; }
-      .topbar { padding: 0 12px; }
-      .brand span { display: none; }
-      .header-meta > .panel-meta { display: none; }
+      .workspace { grid-template-columns: 1fr; grid-template-rows: minmax(390px, 48vh) minmax(420px, 1fr); }
+      .brain-panel { border-right: 0; border-bottom: 1px solid var(--line); }
+      .masthead { padding: 0 16px; }
+      .timeline { padding-right: 12px; padding-left: 12px; }
+    }
+
+    @media (max-width: 560px) {
+      .identity { gap: 7px; }
+      .identity strong { font-size: 13px; }
+      .identity span, .masthead-meta { font-size: 9px; }
+      .panel-heading { padding: 0 12px; }
+      .timeline { grid-template-rows: auto 34px 50px; gap: 4px; padding-top: 6px; }
+      .timeline-caption { align-items: flex-start; }
+      .caption-text { align-items: flex-start; flex-direction: column; gap: 3px; }
+      #caption { white-space: normal; }
+      .transport { grid-template-columns: 64px minmax(60px, 1fr); gap: 9px; }
+      #sync-status { display: none; }
+      .event-button { flex-direction: column; align-items: flex-start; gap: 2px; padding-right: 6px; padding-left: 6px; }
+      .event-button strong { max-width: 100%; font-size: 8px; }
+      .signal-meta { gap: 7px; }
     }
   </style>
 </head>
 <body>
-  <header class="topbar">
-    <div class="brand">
-      <strong>EEG signal demo</strong>
-      <span>N27 · 15 illustrative channels · 20-second loop</span>
+  <header class="masthead">
+    <div class="identity">
+      <strong>EEG · N27</strong>
+      <span>Illustrative cortical signals</span>
     </div>
-    <div class="header-meta">
-      <span class="panel-meta">Educational visualization · not clinical data</span>
-      <span class="illustrative">ILLUSTRATIVE</span>
+    <div class="masthead-tools">
+      <span class="illustrative-badge">ILLUSTRATIVE</span>
+      <span class="masthead-meta">SIMULATED DATA · 250 Hz</span>
+      <details class="about">
+        <summary>About</summary>
+        <div class="about-body">
+          <p>Simulated EEG signals shown with the N27 template in threeBrain. This is an educational illustration, not human data or a diagnostic tool.</p>
+          <p>Electrodes are shown at the cortex for visibility; real EEG electrodes sit on the scalp.</p>
+          <p>Cite: Wang Z, Magnotti JF, Zhang X, Beauchamp MS. YAEL: your advanced electrode localizer. eNeuro 2023.</p>
+        </div>
+      </details>
     </div>
   </header>
 
-  <main class="main">
-    <section class="viewer-panel" aria-label="Interactive N27 brain viewer">
+  <main class="workspace">
+    <section class="brain-panel" aria-label="N27 brain model">
       <div class="panel-heading">
-        <h2>N27 cortical model</h2>
-        <span class="panel-meta">ERD % · blue = decrease / red = increase</span>
+        <h2>N27 template · threeBrain</h2>
+        <span class="sync-state" id="viewer-state" role="status">Connecting to viewer</span>
       </div>
-      <div class="visual-tabs" role="tablist" aria-label="Brain visualizer">
-        <button class="visual-tab" id="scene-tab" type="button" role="tab" aria-selected="true" aria-controls="scene-wrap">3D EEG</button>
-        <button class="visual-tab" id="threebrain-tab" type="button" role="tab" aria-selected="false" aria-controls="brain">threeBrain viewer</button>
-      </div>
-      <div class="scene-wrap" id="scene-wrap" role="tabpanel" aria-labelledby="scene-tab">
-        <canvas id="brain-scene" aria-label="Interactive N27 brain with value-colored illustrative EEG electrodes"></canvas>
-        <div class="scene-status" id="scene-status">Loading local N27 meshes…</div>
-        <div class="scene-tools" aria-label="Brain camera views">
-          <button class="view-button" type="button" data-view="top">Top</button>
-          <button class="view-button" type="button" data-view="left">Left</button>
-          <button class="view-button" type="button" data-view="right">Right</button>
-          <button class="view-button" type="button" data-view="front">Front</button>
+      <iframe id="brain" title="threeBrain N27 viewer" src="../public/viewer.html"></iframe>
+      <section class="mri-panel" aria-label="Three synchronized N27 anatomical MRI views">
+        <div class="mri-heading">
+          <strong>N27 anatomy · synchronized scan planes</strong>
+          <span class="mri-focus">Static template · scan position follows playback</span>
         </div>
-      </div>
-      <iframe id="brain" title="Interactive threeBrain N27 viewer" src="../public/viewer.html"></iframe>
-      <details class="about">
-        <summary>About this demo</summary>
-        <div class="about-body">
-          <p>Illustrative EEG rhythms mapped to the N27 template with threeBrain. The simulated signals are not measurements from a person and are not for diagnosis.</p>
-          <p>Electrodes shown at the cortex for illustration. Real EEG electrodes sit on the scalp.</p>
-          <p>Cite: Wang Z, Magnotti JF, Zhang X, Beauchamp MS. YAEL: your advanced electrode localizer. eNeuro 2023.</p>
-          <p>Template: N27 (Colin 27). Viewer: threeBrain.</p>
+        <div class="mri-planes">
+          <figure class="mri-plane">
+            <figcaption>Axial <span id="axial-position">—</span></figcaption>
+            <div class="mri-scan-stage"><canvas id="mri-axial" class="mri-scan" aria-label="Synchronized axial N27 MRI view"></canvas></div>
+          </figure>
+          <figure class="mri-plane">
+            <figcaption>Coronal <span id="coronal-position">—</span></figcaption>
+            <div class="mri-scan-stage"><canvas id="mri-coronal" class="mri-scan" aria-label="Synchronized coronal N27 MRI view"></canvas></div>
+          </figure>
+          <figure class="mri-plane">
+            <figcaption>Sagittal <span id="sagittal-position">—</span></figcaption>
+            <div class="mri-scan-stage"><canvas id="mri-sagittal" class="mri-scan" aria-label="Synchronized sagittal N27 MRI view"></canvas></div>
+          </figure>
         </div>
-      </details>
-      <div class="disclaimer">Electrodes shown at the cortex for illustration. Real EEG electrodes sit on the scalp.</div>
+      </section>
+      <div class="brain-note">Static N27 anatomy, not MRI activity; all three planes sweep with playback. EEG traces are simulated.</div>
     </section>
 
-    <section class="signals-panel" aria-label="Illustrative channel waveforms">
-      <div class="panel-heading">
-        <h2>Channel waveforms</h2>
-        <div class="readout"><span id="selected-channel">Fp1</span><strong id="current-value">0.0 µV</strong><small>250 Hz sampling (illustrative)</small></div>
+    <section class="signal-panel" aria-label="EEG channel traces">
+      <div class="panel-heading signal-heading">
+        <h2>Channel signals</h2>
+        <div class="signal-meta">
+          <span class="selected-readout" id="selected-readout">Fp1 · 0.0 µV</span>
+          <span class="scale-readout" id="scale-readout">Scale ±25 µV</span>
+        </div>
       </div>
-      <canvas id="traces" aria-label="EEG waveforms by channel"></canvas>
-      <div class="trace-note">Click a trace to select its channel · 5-second view centered on the current time</div>
+      <canvas id="traces" aria-label="15 illustrative EEG traces with microvolt scale"></canvas>
+      <div class="signal-foot">µV · 1 second per division · select a trace to inspect</div>
     </section>
   </main>
 
-  <footer class="timeline">
-    <div class="caption-row">
-      <span class="time-chip" id="time-readout">00.0 s</span>
-      <span id="caption">Loading illustrative EEG data…</span>
+  <footer class="timeline" aria-label="Scenario timeline">
+    <div class="timeline-caption">
+      <div class="caption-text">
+        <span class="event-name" id="event-name">Loading signals</span>
+        <span id="caption">Loading illustrative EEG data…</span>
+      </div>
+      <span id="time-readout">00.0 s</span>
     </div>
-    <div class="controls">
-      <button class="play-button" id="play-button" type="button" disabled>▶ Play</button>
-      <input id="time-slider" type="range" min="0" max="199" step="1" value="0" aria-label="Scenario time">
-      <span id="sync-status" role="status">Loading</span>
+    <div class="transport">
+      <button class="play-button" id="play-button" type="button" disabled>Play</button>
+      <input id="time-slider" type="range" min="0" max="199" step="1" value="0" aria-label="Scenario time" disabled>
+      <span id="sync-status" role="status">Waiting for the viewer</span>
     </div>
     <div class="events" id="events" aria-label="Scenario events"></div>
   </footer>
@@ -488,24 +463,27 @@
     const timeSlider = document.getElementById("time-slider");
     const playButton = document.getElementById("play-button");
     const syncStatus = document.getElementById("sync-status");
+    const viewerState = document.getElementById("viewer-state");
     const caption = document.getElementById("caption");
+    const eventName = document.getElementById("event-name");
     const eventList = document.getElementById("events");
-    const currentValue = document.getElementById("current-value");
-    const selectedChannelText = document.getElementById("selected-channel");
+    const selectedReadout = document.getElementById("selected-readout");
+    const scaleReadout = document.getElementById("scale-readout");
     let data;
     let events;
+    let mriVolume;
+    let mriMetadata;
+    let mriContexts;
     let channelIndex = 0;
     let currentTime = 0;
     let syncMode = "pending";
     let viewerTime;
     let viewerPlay;
-    let viewerWriteWorks = false;
-    let probingViewer = false;
-    let hubFallbackStarted = false;
     let playing = false;
-    let runStartedAt = 0;
-    let runStartTime = 0;
-    let lastViewerWriteAt = 0;
+    let probingViewer = false;
+    let lastDrawTime = -1;
+    let lastMriSlices = { axial: -1, coronal: -1, sagittal: -1 };
+    let hasLooped = false;
 
     function modulo(value, length) {
       return ((value % length) + length) % length;
@@ -513,6 +491,81 @@
 
     function eventFor(time) {
       return events.find(item => time >= item.start && time < item.end) || events[0];
+    }
+
+    function phaseChannels(time) {
+      const event = eventFor(time);
+      if (event.label === "Left-hand imagery") return ["C4"];
+      if (event.label === "Right-hand imagery") return ["C3"];
+      if (event.label === "Eye blink") return ["Fp1", "Fp2", "F3", "F4"];
+      if (event.label === "Muscle artifact") return ["Fp1", "Fp2", "F3", "F4", "FC3", "FC4"];
+      return [];
+    }
+
+    function drawMriPlane(plane, time) {
+      if (!mriVolume || !mriContexts) return;
+      const [width, height, depth] = mriMetadata.dimensions;
+      const [horizontalStart, horizontalEnd] = mriMetadata.display_bounds.horizontal;
+      const [verticalStart, verticalEnd] = mriMetadata.display_bounds.vertical;
+      const [coordinateStart, coordinateEnd] = mriMetadata.sweep_ranges_tkras_mm[plane];
+      const progress = modulo(time, DURATION) / DURATION;
+      const sweep = progress < 0.5 ? progress * 2 : 2 - progress * 2;
+      const coordinate = coordinateStart + sweep * (coordinateEnd - coordinateStart);
+      const transform = mriMetadata.tkras_to_voxel;
+      const axis = { axial: 1, coronal: 2, sagittal: 0 }[plane];
+      const tkrasAxis = { axial: 2, coronal: 1, sagittal: 0 }[plane];
+      const axisSize = mriMetadata.dimensions[axis];
+      const slice = Math.max(0, Math.min(axisSize - 1, transform[axis][tkrasAxis] * coordinate + transform[axis][3]));
+      if (Math.abs(slice - lastMriSlices[plane]) < 0.001) return;
+      lastMriSlices[plane] = slice;
+      const lower = Math.floor(slice);
+      const upper = Math.min(axisSize - 1, lower + 1);
+      const fraction = slice - lower;
+      const scanWidth = horizontalEnd - horizontalStart;
+      const scanHeight = verticalEnd - verticalStart;
+      const mriContext = mriContexts[plane];
+      const canvas = mriContext.canvas;
+      if (canvas.width !== scanWidth || canvas.height !== scanHeight) {
+        canvas.width = scanWidth;
+        canvas.height = scanHeight;
+      }
+      const image = mriContext.createImageData(scanWidth, scanHeight);
+      const pixels = image.data;
+
+      for (let row = 0; row < scanHeight; row++) {
+        const vertical = plane === "axial" ? verticalEnd - 1 - row : verticalStart + row;
+        for (let column = 0; column < scanWidth; column++) {
+          const horizontal = horizontalStart + column;
+          let offset;
+          let nextOffset;
+          if (plane === "axial") {
+            offset = (vertical * height + lower) * width + horizontal;
+            nextOffset = (vertical * height + upper) * width + horizontal;
+          } else if (plane === "coronal") {
+            offset = (lower * height + vertical) * width + horizontal;
+            nextOffset = (upper * height + vertical) * width + horizontal;
+          } else {
+            offset = (horizontal * height + vertical) * width + lower;
+            nextOffset = (horizontal * height + vertical) * width + upper;
+          }
+          const next = upper === lower ? mriVolume[offset] : mriVolume[nextOffset];
+          const value = Math.round(mriVolume[offset] * (1 - fraction) + next * fraction);
+          const pixel = (row * scanWidth + column) * 4;
+          pixels[pixel] = value;
+          pixels[pixel + 1] = value;
+          pixels[pixel + 2] = value;
+          pixels[pixel + 3] = 255;
+        }
+      }
+
+      mriContext.putImageData(image, 0, 0);
+      document.getElementById(`${plane}-position`).textContent = `${coordinate.toFixed(0)} mm`;
+    }
+
+    function drawMri(time) {
+      for (const plane of ["axial", "coronal", "sagittal"]) {
+        drawMriPlane(plane, time);
+      }
     }
 
     function sampleAt(channel, time) {
@@ -530,7 +583,7 @@
     function inspectViewer() {
       try {
         const doc = frame.contentDocument;
-        if (!doc || !doc.body) return false;
+        if (!doc?.body) return false;
         viewerTime = namedControl(doc, "Time");
         viewerPlay = namedControl(doc, "Play/Pause", 'input[type="checkbox"]');
         return Boolean(viewerTime && viewerPlay);
@@ -547,8 +600,7 @@
 
     function setViewerTime(time) {
       if (!inspectViewer()) return false;
-      const target = modulo(time, DURATION);
-      viewerTime.value = target.toFixed(3);
+      viewerTime.value = modulo(time, DURATION).toFixed(3);
       viewerTime.dispatchEvent(new Event("input", { bubbles: true }));
       viewerTime.dispatchEvent(new Event("change", { bubbles: true }));
       return true;
@@ -560,73 +612,56 @@
       return viewerPlay.checked === shouldPlay;
     }
 
-    function setHubElectrodeData(time) {
-      if (!hubSocket || hubSocket.readyState !== WebSocket.OPEN || !hubViewerId) return;
-      const sampleIndex = Math.round(modulo(time, DURATION) * 10) % 200;
-      const rows = data.channels.map((channel, index) => {
-        const row = viewerRows[sampleIndex * data.channels.length + index];
-        return { Electrode: index + 1, Subject: "N27", ERD_percent: row.ERD_percent };
-      });
-      hubSocket.send(JSON.stringify({
-        type: "command",
-        id: `erd-${Date.now()}`,
-        target: hubViewerId,
-        name: "set_electrode_data",
-        value: { data: {
-          Electrode: rows.map(row => row.Electrode),
-          Subject: rows.map(row => row.Subject),
-          ERD_percent: rows.map(row => row.ERD_percent),
-        }, updateDisplay: true },
-      }));
-    }
-
     function updatePlayButton() {
-      playButton.textContent = playing ? "❚❚ Pause" : "▶ Play";
+      playButton.textContent = playing ? "Pause" : "Play";
       playButton.setAttribute("aria-pressed", String(playing));
     }
 
-    function updateTime(time, writeViewer = false) {
-      currentTime = modulo(time, DURATION);
-      window.demoCurrentTime = currentTime;
+    function updateTime(time) {
+      const nextTime = modulo(time, DURATION);
+      currentTime = nextTime;
       timeSlider.value = String(Math.round(currentTime * 10));
       document.getElementById("time-readout").textContent = `${currentTime.toFixed(1).padStart(4, "0")} s`;
-      caption.textContent = eventFor(currentTime).caption;
+      const event = eventFor(currentTime);
+      eventName.textContent = event.label;
+      caption.textContent = event.caption;
+      drawMri(currentTime);
       for (const button of eventList.querySelectorAll(".event-button")) {
         const start = Number(button.dataset.start);
         const end = Number(button.dataset.end);
         button.classList.toggle("active", currentTime >= start && currentTime < end);
+        button.setAttribute("aria-current", currentTime >= start && currentTime < end ? "true" : "false");
       }
-      if (writeViewer && viewerWriteWorks && performance.now() - lastViewerWriteAt > 90) {
-        lastViewerWriteAt = performance.now();
-        setViewerTime(currentTime);
+      const drawTime = Math.floor(currentTime * SAMPLE_RATE);
+      if (drawTime !== lastDrawTime) {
+        lastDrawTime = drawTime;
+        draw();
       }
-      if (writeViewer && syncMode === "hub" && performance.now() - lastViewerWriteAt > 90) {
-        lastViewerWriteAt = performance.now();
-        setHubElectrodeData(currentTime);
-      }
-      draw();
-      window.dispatchEvent(new CustomEvent("demo-time", { detail: { time: currentTime } }));
     }
 
     function buildEventList() {
+      const shortLabels = {
+        "Left-hand imagery": "Left imagery",
+        "Right-hand imagery": "Right imagery",
+        "Eye blink": "Blink",
+        "Muscle artifact": "Muscle",
+      };
       eventList.replaceChildren();
       for (const event of events) {
         const button = document.createElement("button");
         button.type = "button";
         button.className = "event-button";
+        button.style.setProperty("--duration", String(event.end - event.start));
         button.dataset.start = String(event.start);
         button.dataset.end = String(event.end);
-        button.textContent = `${event.start.toFixed(0)}–${event.end.toFixed(0)}s · ${event.label}`;
+        button.innerHTML = `<strong></strong><span></span>`;
+        button.setAttribute("aria-label", `${event.label}, ${event.start.toFixed(0)} to ${event.end.toFixed(0)} seconds`);
+        button.querySelector("strong").textContent = shortLabels[event.label] || event.label;
+        button.querySelector("span").textContent = `${event.start.toFixed(0)}–${event.end.toFixed(0)} s`;
         button.title = event.caption;
         button.addEventListener("click", () => {
           if (syncMode === "control") {
             setViewerTime(event.start);
-            updateTime(event.start);
-          } else if (syncMode === "follow") {
-            syncStatus.textContent = "Use viewer Time to seek";
-          } else if (syncMode === "hub") {
-            updateTime(event.start, true);
-          } else {
             updateTime(event.start);
           }
         });
@@ -649,304 +684,178 @@
       const cssWidth = rect.width;
       const cssHeight = rect.height;
       context.clearRect(0, 0, cssWidth, cssHeight);
-      context.fillStyle = "#ffffff";
-      context.fillRect(0, 0, cssWidth, cssHeight);
 
-      const labelWidth = Math.max(43, Math.min(58, cssWidth * 0.12));
+      const labelWidth = Math.max(43, Math.min(54, cssWidth * 0.11));
+      const top = 10;
+      const bottom = 25;
       const plotLeft = labelWidth;
-      const plotWidth = Math.max(1, cssWidth - labelWidth - 10);
-      const rowHeight = cssHeight / data.channels.length;
-      const start = currentTime - VIEW_SECONDS / 2;
-      const pointsPerChannel = Math.round(VIEW_SECONDS * SAMPLE_RATE);
+      const plotRight = cssWidth - 10;
+      const plotWidth = plotRight - plotLeft;
+      const plotHeight = cssHeight - top - bottom;
+      const rowHeight = plotHeight / data.channels.length;
+      const points = Math.max(2, Math.floor(plotWidth));
+      const visibleSeconds = hasLooped
+        ? VIEW_SECONDS
+        : Math.min(VIEW_SECONDS, Math.max(currentTime, 1));
+      const start = currentTime - visibleSeconds;
+      const samples = {};
+      let maximum = 0;
+
+      for (const channel of data.channels) {
+        const values = new Array(points + 1);
+        for (let point = 0; point <= points; point++) {
+          const sampleTime = start + (point / points) * visibleSeconds;
+          const value = sampleAt(channel, sampleTime);
+          values[point] = value;
+          maximum = Math.max(maximum, Math.abs(value));
+        }
+        samples[channel] = values;
+      }
+
+      const scale = 45;
+      scaleReadout.textContent = `±${scale} µV / lane${maximum > scale ? " · peaks clipped" : ""}`;
+      const emphasizedChannels = phaseChannels(currentTime);
+      context.font = "10px Arial, sans-serif";
+      context.textBaseline = "middle";
+
+      for (let age = Math.ceil(visibleSeconds); age >= 0; age--) {
+        if (age > visibleSeconds) continue;
+        const x = plotRight - (age / visibleSeconds) * plotWidth;
+        context.strokeStyle = age === 0 ? "#9ab5b7" : "#edf1f2";
+        context.lineWidth = 1;
+        context.beginPath();
+        context.moveTo(x, top);
+        context.lineTo(x, top + plotHeight);
+        context.stroke();
+        context.fillStyle = "#819099";
+        context.textAlign = "center";
+        context.fillText(age === 0 ? "Now" : `−${age} s`, x, cssHeight - 10);
+      }
 
       for (let channel = 0; channel < data.channels.length; channel++) {
         const channelName = data.channels[channel];
-        const rowTop = channel * rowHeight;
+        const rowTop = top + channel * rowHeight;
         const middle = rowTop + rowHeight / 2;
-        const isSelected = channel === channelIndex;
-        if (isSelected) {
-          context.fillStyle = "rgba(22, 124, 128, 0.08)";
+        const selected = channel === channelIndex;
+        const emphasized = emphasizedChannels.includes(channelName);
+        if (selected || emphasized) {
+          context.fillStyle = selected ? "rgba(22, 120, 123, .055)" : "rgba(22, 120, 123, .035)";
           context.fillRect(0, rowTop, cssWidth, rowHeight);
         }
-        context.strokeStyle = "#e7ecef";
+
+        context.strokeStyle = "#e7ecee";
         context.lineWidth = 1;
         context.beginPath();
         context.moveTo(plotLeft, middle);
-        context.lineTo(cssWidth, middle);
+        context.lineTo(plotRight, middle);
         context.stroke();
-        context.fillStyle = isSelected ? "#176d70" : "#627582";
-        context.font = `${isSelected ? "600 " : ""}10px system-ui, sans-serif`;
-        context.textBaseline = "middle";
-        context.fillText(channelName, 8, middle);
 
-        const samples = data.samples[channelName];
-        let visiblePeak = 0;
-        for (let point = 0; point <= pointsPerChannel; point++) {
-          const time = start + point / SAMPLE_RATE;
-          visiblePeak = Math.max(visiblePeak, Math.abs(sampleAt(channelName, time)));
-        }
-        const scale = Math.max(12, visiblePeak * 1.12);
-        const amplitude = Math.max(2, rowHeight * 0.39);
-        context.strokeStyle = isSelected ? "#167c80" : "#7896a8";
-        context.globalAlpha = isSelected ? 0.98 : 0.76;
-        context.lineWidth = isSelected ? 1.45 : 1.05;
+        context.fillStyle = selected || emphasized ? "#176d70" : "#5c6e78";
+        context.textAlign = "left";
+        context.fillText(channelName, 10, middle);
+
+        const amplitude = Math.max(2, rowHeight * 0.44);
+        const series = samples[channelName];
+        context.save();
         context.beginPath();
-        for (let point = 0; point <= pointsPerChannel; point++) {
-          const time = start + point / SAMPLE_RATE;
-          const value = sampleAt(channelName, time);
-          const x = plotLeft + (point / pointsPerChannel) * plotWidth;
-          const y = middle - (value / scale) * amplitude;
+        context.rect(plotLeft, rowTop + 1, plotWidth, Math.max(0, rowHeight - 2));
+        context.clip();
+        context.strokeStyle = selected ? "#245f6b" : "#455965";
+        context.globalAlpha = selected || emphasized ? 0.96 : 0.78;
+        context.lineWidth = selected ? 1.35 : emphasized ? 1.15 : 1;
+        context.beginPath();
+        for (let point = 0; point < series.length; point++) {
+          const x = plotLeft + (point / points) * plotWidth;
+          const y = middle - (series[point] / scale) * amplitude;
           if (point === 0) context.moveTo(x, y);
           else context.lineTo(x, y);
         }
         context.stroke();
-        context.globalAlpha = 1;
+        context.restore();
       }
 
-      const nowX = plotLeft + plotWidth / 2;
-      context.strokeStyle = "#c18a32";
-      context.lineWidth = 1.5;
-      context.setLineDash([4, 4]);
-      context.beginPath();
-      context.moveTo(nowX, 0);
-      context.lineTo(nowX, cssHeight);
-      context.stroke();
-      context.setLineDash([]);
-
-      const value = sampleAt(data.channels[channelIndex], currentTime);
-      currentValue.textContent = `${value.toFixed(1)} µV`;
-      selectedChannelText.textContent = data.channels[channelIndex];
+      const currentValue = sampleAt(data.channels[channelIndex], currentTime);
+      selectedReadout.textContent = `${data.channels[channelIndex]} · ${currentValue.toFixed(1)} µV`;
     }
 
     async function probeViewer() {
       if (probingViewer || syncMode !== "pending") return;
       probingViewer = true;
       const start = performance.now();
-      while (performance.now() - start < 45000 && !inspectViewer()) {
-        await new Promise(resolve => setTimeout(resolve, 250));
-      }
-      if (!inspectViewer()) {
-        await startHubFallback();
-        probingViewer = false;
-        return;
+      while (performance.now() - start < 30000 && !inspectViewer()) {
+        await new Promise(resolve => setTimeout(resolve, 200));
       }
 
-      const originalTime = readViewerTime() ?? 0;
-      const testTime = originalTime < 10 ? originalTime + 1.3 : originalTime - 1.3;
-      const testAccepted = setViewerTime(testTime);
-      await new Promise(resolve => setTimeout(resolve, 220));
-      const observed = readViewerTime();
-      viewerWriteWorks = testAccepted && observed !== null && Math.abs(observed - testTime) < 0.12;
-      setViewerTime(currentTime);
-
-      if (viewerWriteWorks) {
-        syncMode = "control";
-        syncStatus.textContent = "Synced · page controls viewer";
-        timeSlider.disabled = false;
-        setViewerPlaying(playing);
-      } else {
-        syncMode = "follow";
-        syncStatus.textContent = "Follow mode · use viewer Play/Time";
-        timeSlider.disabled = true;
+      if (inspectViewer()) {
+        const originalTime = readViewerTime() ?? 0;
+        const testTime = originalTime < 10 ? originalTime + 1.3 : originalTime - 1.3;
+        const accepted = setViewerTime(testTime);
+        await new Promise(resolve => setTimeout(resolve, 180));
+        const observed = readViewerTime();
+        if (accepted && observed !== null && Math.abs(observed - testTime) < 0.12) {
+          syncMode = "control";
+          syncStatus.textContent = "Linked to threeBrain";
+          viewerState.textContent = "Viewer connected";
+          viewerState.dataset.ready = "true";
+          timeSlider.disabled = false;
+          playButton.disabled = false;
+          setViewerTime(currentTime);
+          setViewerPlaying(playing);
+          updateTime(currentTime);
+          probingViewer = false;
+          return;
+        }
       }
-      playButton.disabled = false;
+
+      syncMode = "follow";
+      syncStatus.textContent = "Use Time and Play in threeBrain";
+      viewerState.textContent = "Use viewer controls";
+      timeSlider.disabled = true;
+      playButton.disabled = true;
       probingViewer = false;
     }
 
-    let hubSocket;
-    let hubViewerId;
-    let viewerRows = [];
-
-    async function startHubFallback() {
-      if (hubFallbackStarted) return;
-      hubFallbackStarted = true;
-      syncStatus.textContent = "Same-origin viewer access unavailable";
-      try {
-        hubSocket = new WebSocket("ws://127.0.0.1:17285");
-      } catch {
-        syncMode = "local";
-        syncStatus.textContent = "Viewer sync unavailable";
-        playButton.disabled = false;
-        return;
-      }
-      const timer = setTimeout(() => {
-        if (syncMode === "pending") {
-          syncMode = "local";
-          syncStatus.textContent = "Viewer sync unavailable";
-          playButton.disabled = false;
-        }
-      }, 2500);
-      hubSocket.addEventListener("open", () => {
-        hubSocket.send(JSON.stringify({
-          type: "hello", protocol: 1, role: "controller", name: "EEG signal demo",
-        }));
-      });
-      hubSocket.addEventListener("message", event => {
-        let message;
-        try {
-          message = JSON.parse(event.data);
-        } catch {
-          return;
-        }
-        if (message.type === "welcome") {
-          hubSocket.send(JSON.stringify({ type: "list", id: "list-viewers" }));
-        } else if (message.type === "result" && message.id === "list-viewers") {
-          const target = (message.value || []).find(item => (item.subjects || []).includes("N27"));
-          if (!target) {
-            syncStatus.textContent = "Hub connected; no N27 viewer";
-            return;
-          }
-          clearTimeout(timer);
-          hubViewerId = target.id;
-          syncMode = "hub";
-          syncStatus.textContent = "Synced · local viewer hub";
-          timeSlider.disabled = false;
-          playButton.disabled = false;
-          hubSocket.send(JSON.stringify({
-            type: "command",
-            id: "select-erd",
-            target: hubViewerId,
-            name: "display_data",
-            value: { variable: "ERD_percent", range: [-100, 100] },
-          }));
-        }
-      });
-      hubSocket.addEventListener("error", () => {
-        clearTimeout(timer);
-        if (syncMode === "pending") {
-          syncMode = "local";
-          syncStatus.textContent = "Viewer sync unavailable";
-          playButton.disabled = false;
-        }
-      });
-    }
-
     function setPlaying(next) {
-      if ((syncMode === "control" || syncMode === "follow") && !setViewerPlaying(next)) {
-        syncMode = "follow";
-        viewerWriteWorks = false;
-        syncStatus.textContent = "Follow mode · use viewer Play/Time";
-      }
-      if (syncMode === "hub" && hubSocket?.readyState === WebSocket.OPEN) {
-        const id = `focus-${Date.now()}`;
-        hubSocket.send(JSON.stringify({
-          type: "command",
-          id,
-          target: hubViewerId,
-          name: "focused_electrode",
-          value: { subject_code: "N27", electrode: channelIndex + 1 },
-        }));
-      }
+      if (syncMode !== "control" || !setViewerPlaying(next)) return;
       playing = next;
-      if (playing) {
-        runStartedAt = performance.now();
-        runStartTime = currentTime;
-      }
       updatePlayButton();
     }
 
-    function parseValuesCsv(text) {
-      const lines = text.trim().split(/\r?\n/);
-      const headers = lines.shift().split(",");
-      const electrodeColumn = headers.indexOf("Electrode");
-      const timeColumn = headers.indexOf("Time");
-      const erdColumn = headers.indexOf("ERD_percent");
-      if (electrodeColumn < 0 || timeColumn < 0 || erdColumn < 0) {
-        throw new Error("values.csv is missing Electrode, Time, or ERD_percent");
-      }
-      return lines.map(line => {
-        const columns = line.split(",");
-        return {
-          Electrode: Number(columns[electrodeColumn]),
-          Time: Number(columns[timeColumn]),
-          ERD_percent: Number(columns[erdColumn]),
-        };
-      });
-    }
-
-    function animationFrame(now) {
+    function animationFrame() {
       if (syncMode === "control" || syncMode === "follow") {
         const time = readViewerTime();
         if (time !== null) {
-          const wasPlaying = viewerPlay?.checked ?? false;
-          if (wasPlaying !== playing) {
-            playing = wasPlaying;
-            updatePlayButton();
-          }
+          const wasPlaying = playing;
+          playing = viewerPlay.checked;
+          if (wasPlaying && time < currentTime - DURATION / 2) hasLooped = true;
+          updatePlayButton();
           updateTime(time);
         }
-      } else if (syncMode === "hub" && playing) {
-        updateTime((runStartTime + (now - runStartedAt) / 1000) % DURATION, true);
-      } else if (syncMode === "local" && playing) {
-        updateTime((runStartTime + (now - runStartedAt) / 1000) % DURATION);
       }
       requestAnimationFrame(animationFrame);
     }
 
     canvas.addEventListener("click", event => {
       if (!data) return;
-      const row = Math.floor(event.offsetY / (canvas.clientHeight / data.channels.length));
-      if (row >= 0 && row < data.channels.length) {
-        channelIndex = row;
-        if (syncMode === "hub" && hubSocket?.readyState === WebSocket.OPEN) {
-          hubSocket.send(JSON.stringify({
-            type: "command",
-            id: `focus-${Date.now()}`,
-            target: hubViewerId,
-            name: "focused_electrode",
-            value: { subject_code: "N27", electrode: channelIndex + 1 },
-          }));
-        }
+      const top = 10;
+      const bottom = 25;
+      const rowHeight = (canvas.clientHeight - top - bottom) / data.channels.length;
+      const index = Math.floor((event.offsetY - top) / rowHeight);
+      if (index >= 0 && index < data.channels.length) {
+        channelIndex = index;
         draw();
       }
     });
 
-    window.addEventListener("demo-select-channel", event => {
-      if (!data) return;
-      const index = data.channels.indexOf(event.detail.channel);
-      if (index < 0) return;
-      channelIndex = index;
-      draw();
-    });
-
-    window.addEventListener("demo-viewer-tab", event => {
-      if (event.detail.active) {
-        if (syncMode === "local") {
-          syncMode = "pending";
-          syncStatus.textContent = "Connecting to threeBrain viewer…";
-          probeViewer();
-        }
-        return;
-      }
-      if (syncMode === "control" || syncMode === "follow") {
-        const resumeLocalPlayback = playing;
-        setViewerPlaying(false);
-        syncMode = "local";
-        syncStatus.textContent = "Synced · local 3D scene clock";
-        timeSlider.disabled = false;
-        playButton.disabled = false;
-        if (resumeLocalPlayback) {
-          runStartedAt = performance.now();
-          runStartTime = currentTime;
-        }
-      }
-    });
-
     timeSlider.addEventListener("input", () => {
+      if (syncMode !== "control") return;
       const time = Number(timeSlider.value) / 10;
-      if (syncMode === "control") setViewerTime(time);
-      else if (syncMode === "follow") {
-        syncStatus.textContent = "Use viewer Time to seek";
-        return;
-      }
-      updateTime(time, syncMode === "hub");
+      if (setViewerTime(time)) updateTime(time);
     });
-
     playButton.addEventListener("click", () => setPlaying(!playing));
-    frame.addEventListener("load", () => {
-      if (data) probeViewer();
-    });
+    frame.addEventListener("load", probeViewer);
     window.addEventListener("resize", draw);
+    new ResizeObserver(draw).observe(canvas);
 
     Promise.all([
       fetch("../data/signals.json").then(response => {
@@ -957,27 +866,38 @@
         if (!response.ok) throw new Error(`events.json: HTTP ${response.status}`);
         return response.json();
       }),
-      fetch("../data/values.csv").then(response => {
-        if (!response.ok) throw new Error(`values.csv: HTTP ${response.status}`);
-        return response.text();
+      fetch("../data/mri-volume.json").then(async response => {
+        if (!response.ok) throw new Error(`mri-volume.json: HTTP ${response.status}`);
+        const metadata = await response.json();
+        const volumeResponse = await fetch(metadata.src);
+        if (!volumeResponse.ok) throw new Error(`N27 MRI volume: HTTP ${volumeResponse.status}`);
+        return { metadata, volume: new Uint8Array(await volumeResponse.arrayBuffer()) };
       }),
-    ]).then(async ([signalData, eventData, valueCsv]) => {
+    ]).then(([signalData, eventData, mriData]) => {
       data = signalData;
       events = eventData;
-      viewerRows = parseValuesCsv(valueCsv);
+      mriMetadata = mriData.metadata;
+      mriVolume = mriData.volume;
+      mriContexts = Object.fromEntries(
+        ["axial", "coronal", "sagittal"].map(plane => [
+          plane,
+          document.getElementById(`mri-${plane}`).getContext("2d", { alpha: false }),
+        ])
+      );
+      const expectedBytes = mriMetadata.dimensions.reduce((product, dimension) => product * dimension, 1);
+      if (mriVolume.length !== expectedBytes) {
+        throw new Error(`N27 MRI volume size mismatch: expected ${expectedBytes} bytes, got ${mriVolume.length}`);
+      }
       buildEventList();
-      syncMode = "local";
-      syncStatus.textContent = "Synced · local 3D scene clock";
-      timeSlider.disabled = false;
-      playButton.disabled = false;
       updateTime(0);
       requestAnimationFrame(animationFrame);
+      probeViewer();
     }).catch(error => {
+      eventName.textContent = "Data error";
       caption.textContent = `Could not load demo data: ${error.message}`;
       syncStatus.textContent = "Data error";
       console.error(error);
     });
   </script>
-  <script type="module" src="./assets/brain-scene.js"></script>
 </body>
 </html>

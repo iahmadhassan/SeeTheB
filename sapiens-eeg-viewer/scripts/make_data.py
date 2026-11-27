@@ -109,6 +109,16 @@ def event_at(time_s: float) -> str:
     raise ValueError(f"No event covers time {time_s}")
 
 
+def smooth_pulse(time_s: float, start: float, end: float, fade: float = 0.18) -> float:
+    def smoothstep(edge_start: float, edge_end: float, value: float) -> float:
+        fraction = min(1.0, max(0.0, (value - edge_start) / (edge_end - edge_start)))
+        return fraction * fraction * (3.0 - 2.0 * fraction)
+
+    return smoothstep(start, start + fade, time_s) * (
+        1.0 - smoothstep(end - fade, end, time_s)
+    )
+
+
 def band_power(
     samples: list[float],
     center: int,
@@ -151,12 +161,17 @@ def generate_signals(rng: random.Random) -> dict[str, list[float]]:
 
     for channel_index, channel in enumerate(CHANNELS):
         noise = pink_noise(rng, SAMPLE_COUNT)
-        alpha_amplitude = 20.0 if channel in posterior else 2.0
-        mu_amplitude = 17.0 if channel in motor else (5.0 if channel in {"FC3", "FC4", "CP3", "CP4"} else 1.5)
+        alpha_amplitude = 17.0 if channel in posterior else 2.5
+        mu_amplitude = 14.0 if channel in motor else (4.5 if channel in {"FC3", "FC4", "CP3", "CP4"} else 1.8)
         alpha_phase = rng.uniform(0.0, 2.0 * math.pi)
+        alpha_modulation_phase = rng.uniform(0.0, 2.0 * math.pi)
         mu_phase = rng.uniform(0.0, 2.0 * math.pi)
-        mu_frequency = 10.0 + (channel_index % 3)
-        muscle_frequency = rng.uniform(36.0, 76.0)
+        mu_modulation_phase = rng.uniform(0.0, 2.0 * math.pi)
+        mu_frequency = 9.6 + (channel_index % 4) * 0.65
+        theta_phases = [rng.uniform(0.0, 2.0 * math.pi) for _ in range(2)]
+        beta_phases = [rng.uniform(0.0, 2.0 * math.pi) for _ in range(3)]
+        slow_phase = rng.uniform(0.0, 2.0 * math.pi)
+        muscle_phases = [rng.uniform(0.0, 2.0 * math.pi) for _ in range(3)]
         samples = []
 
         for index in range(SAMPLE_COUNT):
@@ -164,31 +179,63 @@ def generate_signals(rng: random.Random) -> dict[str, list[float]]:
             event = event_at(time_s)
             mu_scale = 1.0
             if channel == "C4" and event == "Left-hand imagery":
-                mu_scale = 0.30
+                mu_scale -= 0.70 * smooth_pulse(time_s, 4.0, 8.0)
             elif channel == "C3" and event == "Right-hand imagery":
-                mu_scale = 0.30
+                mu_scale -= 0.70 * smooth_pulse(time_s, 10.0, 14.0)
 
+            alpha_envelope = 0.64 + 0.36 * (
+                0.5 + 0.5 * math.sin(2.0 * math.pi * 0.22 * time_s + alpha_modulation_phase)
+            )
+            mu_envelope = 0.66 + 0.34 * (
+                0.5 + 0.5 * math.sin(2.0 * math.pi * 0.17 * time_s + mu_modulation_phase)
+            )
+            alpha_phase_now = (
+                2.0 * math.pi * 10.0 * time_s
+                + alpha_phase
+                + 0.18 * math.sin(2.0 * math.pi * 0.13 * time_s + alpha_modulation_phase)
+            )
+            mu_phase_now = (
+                2.0 * math.pi * mu_frequency * time_s
+                + mu_phase
+                + 0.22 * math.sin(2.0 * math.pi * 0.11 * time_s + mu_modulation_phase)
+            )
             value = (
-                alpha_amplitude * math.sin(2.0 * math.pi * 10.0 * time_s + alpha_phase)
-                + mu_amplitude * mu_scale
-                * math.sin(2.0 * math.pi * mu_frequency * time_s + mu_phase)
-                + 3.0 * noise[index]
+                alpha_amplitude * alpha_envelope * (
+                    math.sin(alpha_phase_now)
+                    + 0.17 * math.sin(2.0 * alpha_phase_now + 0.8)
+                )
+                + mu_amplitude * mu_scale * mu_envelope * (
+                    math.sin(mu_phase_now)
+                    + 0.15 * math.sin(2.0 * mu_phase_now + 1.1)
+                )
+                + 2.1 * math.sin(2.0 * math.pi * 1.2 * time_s + slow_phase)
+                + 2.7 * math.sin(2.0 * math.pi * 5.2 * time_s + theta_phases[0])
+                + 1.8 * math.sin(2.0 * math.pi * 6.7 * time_s + theta_phases[1])
+                + 2.0 * math.sin(2.0 * math.pi * 18.0 * time_s + beta_phases[0])
+                + 1.4 * math.sin(2.0 * math.pi * 23.0 * time_s + beta_phases[1])
+                + 1.0 * math.sin(2.0 * math.pi * 28.0 * time_s + beta_phases[2])
+                + 5.5 * noise[index]
+                + 1.8 * rng.gauss(0.0, 1.0)
             )
 
             if event == "Eye blink":
-                blink = math.exp(-0.5 * ((time_s - 14.5) / 0.115) ** 2)
+                blink = (
+                    145.0 * math.exp(-0.5 * ((time_s - 14.46) / 0.095) ** 2)
+                    - 20.0 * math.exp(-0.5 * ((time_s - 14.66) / 0.14) ** 2)
+                )
                 if channel in {"Fp1", "Fp2"}:
-                    value += 125.0 * blink
+                    value += blink
                 elif channel in frontal:
-                    value += 42.0 * blink
+                    value += 0.32 * blink
                 else:
-                    value += 1.0 * blink
+                    value += 0.015 * blink
 
             if event == "Muscle artifact" and channel in frontal_muscle:
-                envelope = math.sin(math.pi * (time_s - 16.0))
+                envelope = smooth_pulse(time_s, 16.0, 17.0, fade=0.1)
                 value += envelope * (
-                    24.0 * math.sin(2.0 * math.pi * muscle_frequency * time_s)
-                    + 12.0 * rng.uniform(-1.0, 1.0)
+                    9.0 * math.sin(2.0 * math.pi * 39.0 * time_s + muscle_phases[0])
+                    + 7.0 * math.sin(2.0 * math.pi * 57.0 * time_s + muscle_phases[1])
+                    + 12.0 * rng.gauss(0.0, 1.0)
                 )
 
             samples.append(value)

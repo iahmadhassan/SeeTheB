@@ -1,0 +1,45 @@
+{
+  "src": "assets/mri/N27-anatomy.raw",
+  "dimensions": [
+    256,
+    256,
+    256
+  ],
+  "tkras_to_voxel": [
+    [
+      -1,
+      -0,
+      -0,
+      128
+    ],
+    [
+      -0,
+      -0,
+      -1,
+      128
+    ],
+    [
+      0,
+      1,
+      0,
+      128
+    ],
+    [
+      0,
+      0,
+      0,
+      1
+    ]
+  ],
+  "display_bounds": {
+    "horizontal": [32, 224],
+    "vertical": [32, 224]
+  },
+  "sweep_ranges_tkras_mm": {
+    "axial": [-70, 70],
+    "coronal": [-65, 65],
+    "sagittal": [-60, 60]
+  },
+  "source": "N27/mri/brain.finalsurfs.mgz",
+  "space": "FreeSurfer tkRAS, millimetres"
+}
